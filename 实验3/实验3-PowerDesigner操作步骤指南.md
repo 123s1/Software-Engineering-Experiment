@@ -37,29 +37,35 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 
 在打开 Power Designer 之前，先在纸上把 ER 图的要素理清楚。根据实验1和实验2的设计，你的系统有以下实体和关系：
 
-### 1.1 实体清单（6个）
+### 1.1 实体清单（8个）
 
 | 序号 | 实体名称 | 中文名 | 主要属性 |
 | --- | --- | --- | --- |
-| 1 | User | 用户 | user_id, account, user_name, password, role, identity_type, contact_info, user_status |
-| 2 | Classroom | 教室 | classroom_id, classroom_name, location, capacity, equipment_info, classroom_status |
-| 3 | ClassroomTimeSlot | 教室可用时间段 | slot_id, use_date, start_section, end_section, slot_status |
-| 4 | Reservation | 预订记录 | reservation_id, purpose, reservation_status, create_time |
-| 5 | ClassroomMgmtRecord | 教室管理记录 | record_id, operation_type, operation_time, remarks |
-| 6 | UserMgmtRecord | 用户管理记录 | record_id, operation_type, operation_time, remarks |
+| 1 | User | 用户（父实体） | user_id, account, user_name, password, contact_info, user_status |
+| 2 | Administrator | 管理员 | admin_id（继承自User） |
+| 3 | TeacherStudent | 师生用户 | ts_id（继承自User）, identity_type |
+| 4 | Classroom | 教室 | classroom_id, classroom_name, location, capacity, equipment_info, classroom_status |
+| 5 | ClassroomTimeSlot | 教室可用时间段 | slot_id, use_date, start_section, end_section, slot_status |
+| 6 | Reservation | 预订记录 | reservation_id, purpose, reservation_status, create_time |
+| 7 | ClassroomMgmtRecord | 教室管理记录 | record_id, operation_type, operation_time, remarks |
+| 8 | UserMgmtRecord | 用户管理记录 | record_id, operation_type, operation_time, remarks |
 
-### 1.2 关系清单（8条）
+> **说明**：User 是父实体，Administrator 和 TeacherStudent 是子实体，对应实验2类图中的继承关系。管理员和师生的功能不同（管理员可以管理用户/教室，师生可以查询/预订教室），所以要分开建实体。
+
+### 1.2 关系清单（10条）
 
 | 序号 | 关系 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| 1 | 教室 → 教室可用时间段 | 一对多 (1:N) | 一个教室有多个时间段 |
-| 2 | 用户 → 预订记录 | 一对多 (1:N) | 一个师生发起多条预订 |
-| 3 | 教室 → 预订记录 | 一对多 (1:N) | 一个教室被多次预订 |
-| 4 | 教室可用时间段 → 预订记录 | 一对多 (1:N) | 一个时间段对应多条预订 |
-| 5 | 用户(管理员) → 教室管理记录 | 一对多 (1:N) | 一个管理员产生多条教室管理记录 |
-| 6 | 教室 → 教室管理记录 | 一对多 (1:N) | 一个教室有多条被管理记录 |
-| 7 | 用户(管理员) → 用户管理记录 | 一对多 (1:N) | 一个管理员产生多条用户管理记录 |
-| 8 | 用户(目标用户) → 用户管理记录 | 一对多 (1:N) | 一个用户有多条被管理记录 |
+| 1 | User → Administrator | 继承 | 管理员是用户的一种 |
+| 2 | User → TeacherStudent | 继承 | 师生是用户的一种 |
+| 3 | 教室 → 教室可用时间段 | 一对多 (1:N) | 一个教室有多个时间段 |
+| 4 | 师生 → 预订记录 | 一对多 (1:N) | 一个师生发起多条预订 |
+| 5 | 教室 → 预订记录 | 一对多 (1:N) | 一个教室被多次预订 |
+| 6 | 教室可用时间段 → 预订记录 | 一对多 (1:N) | 一个时间段对应多条预订 |
+| 7 | 管理员 → 教室管理记录 | 一对多 (1:N) | 一个管理员产生多条教室管理记录 |
+| 8 | 教室 → 教室管理记录 | 一对多 (1:N) | 一个教室有多条被管理记录 |
+| 9 | 管理员 → 用户管理记录 | 一对多 (1:N) | 一个管理员产生多条用户管理记录 |
+| 10 | 师生 → 用户管理记录 | 一对多 (1:N) | 一个师生有多条被管理记录 |
 
 ### 1.3 纸上画法
 
@@ -68,6 +74,7 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 - **矩形** = 实体（写上实体名）
 - **椭圆** = 属性（连到实体上，主键属性加下划线）
 - **菱形** = 关系（连接两个实体，旁边标 1 和 N）
+- **三角形 + "ISA"** = 继承关系（User 下面画一个三角形，分别连到 Administrator 和 TeacherStudent）
 
 画完后拍照留存，后面写报告可以放进去。
 
@@ -88,9 +95,9 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 
 工具栏上找到 **实体（Entity）** 工具（一个小矩形图标），然后在画布上单击创建实体。
 
-你需要创建 **6个实体**，以下是每个实体的操作步骤：
+你需要创建 **8个实体**，以下是每个实体的操作步骤：
 
-#### 实体1：User（用户）
+#### 实体1：User（用户，父实体）
 
 1. 在工具栏选择 **实体** 工具，在画布上单击
 2. 双击刚创建的实体，打开属性窗口
@@ -105,8 +112,6 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 | 登录账号 | account | Variable characters(50) | | ✓ |
 | 用户姓名 | user_name | Variable characters(50) | | ✓ |
 | 密码 | password | Variable characters(128) | | ✓ |
-| 角色 | role | Variable characters(20) | | ✓ |
-| 身份类型 | identity_type | Variable characters(20) | | |
 | 联系方式 | contact_info | Variable characters(100) | | |
 | 用户状态 | user_status | Variable characters(20) | | ✓ |
 
@@ -114,9 +119,42 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 
 5. 点击 **确定** 保存
 
-#### 实体2：Classroom（教室）
+#### 实体2：Administrator（管理员，子实体）
 
-双击新建实体，设置：
+1. 在画布上新建一个实体
+2. 双击打开属性窗口
+3. **常规** 选项卡：
+   - 名称：`Administrator`
+   - 代码：`Administrator`
+4. **属性** 选项卡：
+
+| 名称 | 代码 | 数据类型 | P | M |
+| --- | --- | --- | --- | --- |
+| 管理员编号 | admin_id | Variable characters(32) | ✓ | ✓ |
+
+> **说明**：管理员自身只需要一个主键标识，其他属性（account、user_name、password 等）通过继承从 User 获得。
+
+5. 确定
+
+#### 实体3：TeacherStudent（师生用户，子实体）
+
+1. 新建实体
+2. 双击设置：
+   - 名称：`TeacherStudent`
+   - 代码：`TeacherStudent`
+3. 属性：
+
+| 名称 | 代码 | 数据类型 | P | M |
+| --- | --- | --- | --- | --- |
+| 师生编号 | ts_id | Variable characters(32) | ✓ | ✓ |
+| 身份类型 | identity_type | Variable characters(20) | | ✓ |
+
+> **说明**：`identity_type` 用于区分教师和学生，这是师生用户独有的属性。
+
+4. 确定
+
+#### 实体4：Classroom（教室）
+
 - 名称：`Classroom`，代码：`Classroom`
 - 属性：
 
@@ -129,7 +167,7 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 | 设备信息 | equipment_info | Variable characters(200) | | |
 | 教室状态 | classroom_status | Variable characters(20) | | ✓ |
 
-#### 实体3：ClassroomTimeSlot（教室可用时间段）
+#### 实体5：ClassroomTimeSlot（教室可用时间段）
 
 - 名称：`ClassroomTimeSlot`，代码：`ClassroomTimeSlot`
 - 属性：
@@ -142,7 +180,7 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 | 结束课时 | end_section | Integer | | ✓ |
 | 时间段状态 | slot_status | Variable characters(20) | | ✓ |
 
-#### 实体4：Reservation（预订记录）
+#### 实体6：Reservation（预订记录）
 
 - 名称：`Reservation`，代码：`Reservation`
 - 属性：
@@ -154,7 +192,7 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 | 预订状态 | reservation_status | Variable characters(20) | | ✓ |
 | 创建时间 | create_time | Timestamp | | ✓ |
 
-#### 实体5：ClassroomMgmtRecord（教室管理记录）
+#### 实体7：ClassroomMgmtRecord（教室管理记录）
 
 - 名称：`ClassroomMgmtRecord`，代码：`ClassroomMgmtRecord`
 - 属性：
@@ -166,7 +204,7 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 | 操作时间 | operation_time | Timestamp | | ✓ |
 | 备注 | remarks | Variable characters(500) | | |
 
-#### 实体6：UserMgmtRecord（用户管理记录）
+#### 实体8：UserMgmtRecord（用户管理记录）
 
 - 名称：`UserMgmtRecord`，代码：`UserMgmtRecord`
 - 属性：
@@ -178,11 +216,40 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
 | 操作时间 | operation_time | Timestamp | | ✓ |
 | 备注 | remarks | Variable characters(500) | | |
 
-### 2.3 创建关系
+### 2.3 创建继承关系（User → Administrator / TeacherStudent）
+
+Power Designer 的 CDM 支持继承（Inheritance），这一步非常重要！
+
+#### 操作步骤：
+
+1. 在工具栏上找到 **继承（Inheritance）** 工具
+   - 图标样子：一个带三角形的线（类似 UML 中的继承箭头）
+   - 如果找不到，可以在工具栏空白处 **右键** → 勾选显示更多工具
+2. **先点击父实体 `User`**，然后点击画布空白处放置继承符号（会出现一个小半圆或三角形）
+3. 然后分别将继承符号连接到子实体 **`Administrator`** 和 **`TeacherStudent`**
+
+#### 详细操作（另一种方式）：
+
+如果上面的方式不太方便，可以用以下方式：
+
+1. 在工具栏选择 **继承** 工具
+2. 在画布上，**从 `Administrator` 拖到 `User`**（表示 Administrator 继承自 User）
+3. 会自动在两个实体之间画出一个带半圆/三角的继承线
+4. 再用同样的方式，**从 `TeacherStudent` 拖到 `User`**
+
+#### 检查继承设置：
+
+双击继承符号（三角形/半圆），可以看到属性窗口：
+- 父实体（Parent）应该是 `User`
+- 子实体（Children）应该包含 `Administrator` 和 `TeacherStudent`
+
+> **这一步的意义**：继承关系说明管理员和师生都是用户的子类型，生成 PDM 时 Power Designer 会自动在子表中创建指向父表的外键。
+
+### 2.4 创建普通关系
 
 工具栏上找到 **关系（Relationship）** 工具（一条带箭头的线），然后按住鼠标从一个实体拖到另一个实体来创建关系。
 
-你需要创建 **8条关系**：
+你需要创建 **8条普通关系**：
 
 #### 关系1：教室 → 教室可用时间段（1:N）
 
@@ -196,12 +263,12 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
      - ClassroomTimeSlot 端：`0,n`（一个教室可以有0到多个时间段）
 5. 确定
 
-#### 关系2：用户 → 预订记录（1:N）
+#### 关系2：师生 → 预订记录（1:N）
 
-1. 从 **User** 拖到 **Reservation**
+1. 从 **TeacherStudent** 拖到 **Reservation**
 2. 双击设置：
-   - 名称：`用户发起预订`
-   - User 端：`1,1`
+   - 名称：`师生发起预订`
+   - TeacherStudent 端：`1,1`
    - Reservation 端：`0,n`
 
 #### 关系3：教室 → 预订记录（1:N）
@@ -220,12 +287,12 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
    - ClassroomTimeSlot 端：`1,1`
    - Reservation 端：`0,n`
 
-#### 关系5：用户(管理员) → 教室管理记录（1:N）
+#### 关系5：管理员 → 教室管理记录（1:N）
 
-1. 从 **User** 拖到 **ClassroomMgmtRecord**
+1. 从 **Administrator** 拖到 **ClassroomMgmtRecord**
 2. 双击设置：
    - 名称：`管理员管理教室`
-   - User 端：`1,1`
+   - Administrator 端：`1,1`
    - ClassroomMgmtRecord 端：`0,n`
 
 #### 关系6：教室 → 教室管理记录（1:N）
@@ -236,38 +303,55 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
    - Classroom 端：`1,1`
    - ClassroomMgmtRecord 端：`0,n`
 
-#### 关系7：用户(管理员) → 用户管理记录（1:N）
+#### 关系7：管理员 → 用户管理记录（1:N）
 
-1. 从 **User** 拖到 **UserMgmtRecord**
+1. 从 **Administrator** 拖到 **UserMgmtRecord**
 2. 双击设置：
    - 名称：`管理员管理用户`
-   - User 端：`1,1`
+   - Administrator 端：`1,1`
    - UserMgmtRecord 端：`0,n`
 
-#### 关系8：用户(目标用户) → 用户管理记录（1:N）
+#### 关系8：师生 → 用户管理记录（1:N）
 
-1. 从 **User** 拖到 **UserMgmtRecord**
+1. 从 **TeacherStudent** 拖到 **UserMgmtRecord**
 2. 双击设置：
-   - 名称：`用户被管理`
-   - User 端：`1,1`
+   - 名称：`师生被管理`
+   - TeacherStudent 端：`1,1`
    - UserMgmtRecord 端：`0,n`
 
-### 2.4 调整 CDM 布局
+### 2.5 调整 CDM 布局
 
 把实体摆放整齐，建议按以下层次布局：
 
 ```
-第一层（顶部）：      User
-第二层（中间）：      Classroom          UserMgmtRecord
-第三层（中间）：      ClassroomTimeSlot   ClassroomMgmtRecord
-第四层（底部）：      Reservation
+                  ┌──────────┐
+                  │   User   │
+                  └──────────┘
+                 ↙ (继承)  ↘
+     ┌───────────────┐  ┌──────────────┐
+     │ Administrator │  │TeacherStudent│
+     └───────────────┘  └──────────────┘
+      ↓            ↓      ↓           ↓
+┌──────────┐ ┌──────────┐ ┌────────────┐
+│UserMgmt  │ │Classroom │ │Reservation │
+│Record    │ │MgmtRecord│ │            │
+└──────────┘ └──────────┘ └────────────┘
+                  ↑               ↑
+             ┌──────────┐        │
+             │Classroom │────────┘
+             └──────────┘
+                  ↓
+         ┌───────────────┐
+         │ClassroomTime  │
+         │Slot           │
+         └───────────────┘
 ```
 
-### 2.5 保存 CDM
+### 2.6 保存 CDM
 
 菜单 **文件** → **保存**，文件名：`教室预订系统CDM`
 
-### 2.6 截图
+### 2.7 截图
 
 截取完整的 CDM 图，放入实验报告。
 
@@ -287,53 +371,63 @@ PDM 是**针对某个具体数据库（如 MySQL）的表结构设计**。
    - 其他选项保持默认
 4. 点击 **确定**
 
-Power Designer 会自动根据 CDM 中的实体和关系生成对应的数据库表、字段、主键和外键。
+Power Designer 会自动根据 CDM 中的实体、继承和关系生成对应的数据库表、字段、主键和外键。
 
 ### 3.2 检查生成结果
 
 生成完成后，Power Designer 会自动打开 PDM 窗口。你需要检查以下内容：
 
-#### 检查表是否齐全（应该有6张表）
+#### 检查表是否齐全（应该有8张表）
 
-| CDM 实体 | PDM 表名 |
-| --- | --- |
-| User | User |
-| Classroom | Classroom |
-| ClassroomTimeSlot | ClassroomTimeSlot |
-| Reservation | Reservation |
-| ClassroomMgmtRecord | ClassroomMgmtRecord |
-| UserMgmtRecord | UserMgmtRecord |
+| CDM 实体 | PDM 表名 | 说明 |
+| --- | --- | --- |
+| User | User | 用户主表（父表） |
+| Administrator | Administrator | 管理员子表 |
+| TeacherStudent | TeacherStudent | 师生用户子表 |
+| Classroom | Classroom | 教室表 |
+| ClassroomTimeSlot | ClassroomTimeSlot | 教室可用时间段表 |
+| Reservation | Reservation | 预订记录表 |
+| ClassroomMgmtRecord | ClassroomMgmtRecord | 教室管理记录表 |
+| UserMgmtRecord | UserMgmtRecord | 用户管理记录表 |
 
-#### 检查外键是否自动生成
+#### 检查继承产生的外键
 
-生成 PDM 时，CDM 中的一对多关系会自动变成外键。你应该能看到：
+由于 CDM 中有继承关系，PDM 生成时会自动处理：
 
-- Reservation 表中自动出现了 `user_id`、`classroom_id`、`slot_id` 外键字段
-- ClassroomTimeSlot 表中自动出现了 `classroom_id` 外键字段
-- ClassroomMgmtRecord 表中自动出现了 `operator_id`（来自User）、`classroom_id` 外键字段
-- UserMgmtRecord 表中自动出现了 `operator_id`（来自User）、`target_user_id`（来自User）外键字段
+- **Administrator 表**：应该有一个外键字段指向 User 表的 `user_id`（表示管理员是用户的子类）
+- **TeacherStudent 表**：应该有一个外键字段指向 User 表的 `user_id`（表示师生是用户的子类）
 
-> **注意**：Power Designer 自动生成的外键字段名称可能和你预期的不完全一样，你可以双击表来修改字段名称。
+#### 检查普通关系产生的外键
+
+- **ClassroomTimeSlot 表**：有 `classroom_id` 外键 → Classroom 表
+- **Reservation 表**：有 `ts_id` 外键 → TeacherStudent 表、`classroom_id` 外键 → Classroom 表、`slot_id` 外键 → ClassroomTimeSlot 表
+- **ClassroomMgmtRecord 表**：有 `admin_id` 外键 → Administrator 表、`classroom_id` 外键 → Classroom 表
+- **UserMgmtRecord 表**：有 `admin_id` 外键 → Administrator 表（操作人）、`ts_id` 外键 → TeacherStudent 表（被操作的师生）
+
+> **注意**：Power Designer 自动生成的外键字段名称可能和你预期的不完全一样，你可以双击表来修改。
 
 ### 3.3 修改/确认字段名称
 
-双击 PDM 中的每张表，检查并修改外键字段名称，使其与我们的设计一致：
+双击 PDM 中的每张表，检查并修改外键字段名称，使其含义清晰：
 
-**Reservation 表**：确认有以下外键字段
-- `user_id`（指向 User 表）
-- `classroom_id`（指向 Classroom 表）
-- `slot_id`（指向 ClassroomTimeSlot 表）
+**Administrator 表**：
+- `user_id`（外键指向 User 表）— 继承关系产生的
 
-**ClassroomTimeSlot 表**：确认有
-- `classroom_id`（指向 Classroom 表）
+**TeacherStudent 表**：
+- `user_id`（外键指向 User 表）— 继承关系产生的
 
-**ClassroomMgmtRecord 表**：确认有
-- `operator_id`（指向 User 表）— 如果自动生成的名称是 `user_id`，改成 `operator_id`
-- `classroom_id`（指向 Classroom 表）
+**Reservation 表**：
+- `ts_id`（指向 TeacherStudent 表）— 申请人
+- `classroom_id`（指向 Classroom 表）— 被预订教室
+- `slot_id`（指向 ClassroomTimeSlot 表）— 占用时间段
 
-**UserMgmtRecord 表**：确认有
-- `operator_id`（指向 User 表）— 操作人
-- `target_user_id`（指向 User 表）— 被操作的目标用户
+**ClassroomMgmtRecord 表**：
+- `admin_id`（指向 Administrator 表）— 操作的管理员
+- `classroom_id`（指向 Classroom 表）— 被操作的教室
+
+**UserMgmtRecord 表**：
+- `admin_id`（指向 Administrator 表）— 操作的管理员
+- `ts_id`（指向 TeacherStudent 表）— 被管理的师生用户
 
 > **修改方法**：双击表 → 切到 **列（Columns）** 选项卡 → 找到要改的字段 → 修改名称和代码
 
@@ -390,6 +484,7 @@ SELECT
     r.reservation_id,
     u.user_name AS applicant_name,
     u.account AS applicant_account,
+    t.identity_type,
     c.classroom_name,
     c.location,
     ts.use_date,
@@ -399,7 +494,8 @@ SELECT
     r.reservation_status,
     r.create_time
 FROM Reservation r
-INNER JOIN User u ON r.user_id = u.user_id
+INNER JOIN TeacherStudent t ON r.ts_id = t.ts_id
+INNER JOIN User u ON t.user_id = u.user_id
 INNER JOIN Classroom c ON r.classroom_id = c.classroom_id
 INNER JOIN ClassroomTimeSlot ts ON r.slot_id = ts.slot_id
 ```
@@ -426,7 +522,7 @@ INNER JOIN ClassroomTimeSlot ts ON r.slot_id = ts.slot_id
 ```sql
 CREATE PROCEDURE sp_create_reservation(
     IN p_reservation_id VARCHAR(32),
-    IN p_user_id VARCHAR(32),
+    IN p_ts_id VARCHAR(32),
     IN p_classroom_id VARCHAR(32),
     IN p_slot_id VARCHAR(32),
     IN p_purpose VARCHAR(200)
@@ -441,8 +537,8 @@ BEGIN
     
     IF v_slot_status = 'FREE' THEN
         -- 插入预订记录
-        INSERT INTO Reservation (reservation_id, user_id, classroom_id, slot_id, purpose, reservation_status, create_time)
-        VALUES (p_reservation_id, p_user_id, p_classroom_id, p_slot_id, p_purpose, 'CREATED', NOW());
+        INSERT INTO Reservation (reservation_id, ts_id, classroom_id, slot_id, purpose, reservation_status, create_time)
+        VALUES (p_reservation_id, p_ts_id, p_classroom_id, p_slot_id, p_purpose, 'CREATED', NOW());
         
         -- 更新时间段状态为已预订
         UPDATE ClassroomTimeSlot 
@@ -512,33 +608,39 @@ END
 在 PDM 中把表的位置摆好，建议布局：
 
 ```
-        ┌──────────┐
-        │   User   │
-        └──────────┘
-       ↙      ↓       ↘
-┌────────────┐ ┌────────────┐ ┌─────────────┐
-│UserMgmt    │ │ Classroom  │ │ClassroomMgmt│
-│Record      │ └────────────┘ │Record       │
-└────────────┘      ↓         └─────────────┘
-              ┌──────────────┐
-              │ClassroomTime │
-              │Slot          │
-              └──────────────┘
-                    ↓
-              ┌──────────────┐
-              │ Reservation  │
-              └──────────────┘
+                  ┌──────────┐
+                  │   User   │
+                  └──────────┘
+                 ↙           ↘
+     ┌───────────────┐  ┌──────────────┐
+     │ Administrator │  │TeacherStudent│
+     └───────────────┘  └──────────────┘
+      ↓            ↓      ↓           ↓
+┌──────────┐ ┌──────────┐ ┌────────────┐
+│UserMgmt  │ │Classroom │ │Reservation │
+│Record    │ │MgmtRecord│ │            │
+└──────────┘ └──────────┘ └────────────┘
+                  ↑               ↑
+             ┌──────────┐        │
+             │Classroom │────────┘
+             └──────────┘
+                  ↓
+         ┌───────────────┐
+         │ClassroomTime  │
+         │Slot           │
+         └───────────────┘
 ```
 
 ### 6.3 需要截图的内容
 
 你需要截取以下内容放入实验报告：
 
-1. **CDM 概念数据模型全图**（包含所有实体和关系）
+1. **CDM 概念数据模型全图**（包含所有实体、继承关系和普通关系）
 2. **PDM 物理数据模型全图**（包含所有表、外键连线）
 3. **视图的 SQL 定义**（双击视图截图 SQL 内容）
 4. **存储过程的定义**（双击存储过程截图代码）
 5. **某张表的列定义**（如双击 Reservation 表，截图字段列表，展示主外键）
+6. **继承关系的截图**（展示 User、Administrator、TeacherStudent 之间的继承线）
 
 ---
 
@@ -559,25 +661,33 @@ END
 
 ## 8. 常见问题
 
-### Q：创建关系时，基数（Cardinality）怎么选？
+### Q：创建继承关系时找不到继承工具怎么办？
+
+在 Power Designer 15.1 中文版中：
+- 工具栏上的继承工具图标可能不太明显
+- 你也可以通过菜单方式：先选中父实体 `User`，然后右键 → 选择相关的继承操作
+- 或者在左侧浏览器面板中，右键 CDM 模型 → **新建** → **继承**
+- 还有一种方法：工具栏上点击鼠标右键，可以看到所有可用工具，找到"继承"
+
+### Q：基数（Cardinality）怎么选？
 
 - `1,1` 表示"必须且只能有一个"（必填的一端）
 - `0,n` 表示"可以有零个或多个"（多的一端）
 - `0,1` 表示"可以有零个或一个"
 
-本系统所有关系都是 **一端 `1,1`，多端 `0,n`**。
+本系统的普通关系都是 **一端 `1,1`，多端 `0,n`**。
 
-### Q：User 表到 UserMgmtRecord 需要拉两条关系线吗？
+### Q：为什么 Administrator 和 TeacherStudent 要单独建实体？
 
-是的。因为 UserMgmtRecord 有两个外键都指向 User 表：
-- `operator_id`（操作人，管理员）
-- `target_user_id`（被操作的用户）
+因为管理员和师生的**功能完全不同**：
+- **管理员**：管理用户、管理教室、设置时间段、查看预订情况
+- **师生**：查询空闲教室、预订教室
 
-所以你需要从 User 到 UserMgmtRecord 拉 **两条** 关系线，分别代表这两个不同含义的关联。
+在实验2的类图中，它们就是 User 的两个子类（继承关系）。在 CDM 中用继承来体现这种关系，生成 PDM 时会自动产生父子表的外键关联。
 
 ### Q：CDM 生成 PDM 后，外键字段名不对怎么办？
 
-直接在 PDM 中双击表，修改字段的名称和代码即可。Power Designer 自动生成的外键名称可能会用默认规则命名（如 `User_user_id`），你改成 `operator_id`、`target_user_id` 等即可。
+直接在 PDM 中双击表，修改字段的名称和代码即可。Power Designer 自动生成的外键名称可能会用默认规则命名，你改成 `admin_id`、`ts_id` 等即可。
 
 ### Q：视图和存储过程在 PDM 图上看不到怎么办？
 
@@ -596,9 +706,24 @@ END
 建议按以下顺序写实验3报告：
 
 1. **实验目的**：掌握 Power Designer 建模方法，学会数据库设计
-2. **设计思路**：简述从类图到数据表的映射过程，重点说明三组多对多关系如何通过中间表拆分
+2. **设计思路**：
+   - 从实验2类图中提取实体和关系
+   - 说明继承关系（User → Administrator / TeacherStudent）在数据库中如何表达
+   - 说明三组多对多关系如何通过中间表拆分
 3. **CDM 概念数据模型**：放CDM截图 + 简要说明实体和关系
 4. **PDM 物理数据模型**：放PDM截图 + 各表字段说明
 5. **视图设计**：放视图SQL截图 + 说明用途
 6. **存储过程设计**：放存储过程截图 + 说明用途
 7. **总结**：说明设计如何支撑系统功能需求
+
+### 关于三组多对多关系的报告写法
+
+在报告中可以这样描述：
+
+> 本系统中存在三组多对多关系，通过引入中间实体拆分为一对多关系：
+>
+> 1. **师生 ↔ 教室（预订关系）**：多名师生可预订多间教室。通过 `Reservation`（预订记录）拆分为：TeacherStudent (1) → (0..*) Reservation，Reservation (0..*) → (1) Classroom。
+>
+> 2. **管理员 ↔ 教室（管理关系）**：多个管理员可管理多个教室。通过 `ClassroomMgmtRecord`（教室管理记录）拆分为：Administrator (1) → (0..*) ClassroomMgmtRecord，ClassroomMgmtRecord (0..*) → (1) Classroom。
+>
+> 3. **管理员 ↔ 师生（管理关系）**：多个管理员可管理多名师生。通过 `UserMgmtRecord`（用户管理记录）拆分为：Administrator (1) → (0..*) UserMgmtRecord，UserMgmtRecord (0..*) → (1) TeacherStudent。
