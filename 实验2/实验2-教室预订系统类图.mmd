@@ -10,21 +10,24 @@ class User {
   +String userStatus
   +login(account, password)
   +changePassword(oldPassword, newPassword)
+  +enable()
+  +disable()
 }
 
 class Administrator {
-  +addUser(userInfo)
-  +deleteUser(userId)
-  +addClassroom(classroomInfo)
-  +deleteClassroom(classroomId)
-  +setAvailableTimeSlot(classroomId, slotInfo)
-  +viewReservations(startDate, endDate)
+  +addUser(service, user) : UserManagementRecord
+  +disableUser(service, user) : UserManagementRecord
+  +addClassroom(service, classroom) : ClassroomManagementRecord
+  +deleteClassroom(service, classroom) : ClassroomManagementRecord
+  +setAvailableTimeSlot(service, classroom, timeSlot) : ClassroomManagementRecord
+  +viewReservations(service) : Reservation[]
 }
 
 class TeacherStudentUser {
   +String identityType
-  +searchAvailableClassrooms(date, startSection, endSection)
-  +reserveClassroom(classroomId, slotId, purpose)
+  +searchAvailableClassrooms(service, date, startSection, endSection)
+  +reserveClassroom(service, classroomId, slotId, purpose)
+  +addReservation(reservation)
 }
 
 class Classroom {
@@ -37,6 +40,7 @@ class Classroom {
   +isReservable()
   +enable()
   +disable()
+  +addTimeSlot(timeSlot)
 }
 
 class ClassroomTimeSlot {
@@ -60,23 +64,39 @@ class Reservation {
   +cancel()
 }
 
+class ClassroomManagementRecord {
+  +String recordId
+  +Administrator operator
+  +Classroom targetClassroom
+  +String operationType
+  +String operationTime
+  +String remarks
+}
+
+class UserManagementRecord {
+  +String recordId
+  +Administrator operator
+  +User targetUser
+  +String operationType
+  +String operationTime
+  +String remarks
+}
+
 class AuthenticationService {
   +authenticate(account, password)
   +updatePassword(userId, oldPassword, newPassword)
 }
 
 class UserManagementService {
-  +createUser(userInfo)
-  +disableUser(userId)
-  +validateUserUniqueness(account)
-  +handleUserReservations(userId)
+  +createUser(operator, userInfo) : UserManagementRecord
+  +disableUser(operator, user) : UserManagementRecord
+  +validateUser(user) : boolean
 }
 
 class ClassroomManagementService {
-  +createClassroom(classroomInfo)
-  +disableClassroom(classroomId)
-  +assignTimeSlot(classroomId, slotInfo)
-  +validateTimeSlot(classroomId, slotInfo)
+  +createClassroom(operator, classroom) : ClassroomManagementRecord
+  +disableClassroom(operator, classroom) : ClassroomManagementRecord
+  +assignTimeSlot(operator, classroom, timeSlot) : ClassroomManagementRecord
 }
 
 class ReservationService {
@@ -87,19 +107,33 @@ class ReservationService {
   +queryReservations(startDate, endDate)
 }
 
+%% 继承关系
 User <|-- Administrator
 User <|-- TeacherStudentUser
-TeacherStudentUser "1" --> "0..*" Reservation : submits
+
+%% 组合关系
 Classroom "1" *-- "0..*" ClassroomTimeSlot : contains
+
+%% 关联关系：师生与预订（拆分师生-教室 N:M）
+TeacherStudentUser "1" --> "0..*" Reservation : submits
 Reservation "0..*" --> "1" Classroom : targets
 Reservation "0..*" --> "1" ClassroomTimeSlot : occupies
 
+%% 关联关系：管理员与教室管理记录（拆分管理员-教室 N:M）
+Administrator "1" --> "0..*" ClassroomManagementRecord : operates
+ClassroomManagementRecord "0..*" --> "1" Classroom : logs
+
+%% 关联关系：管理员与用户管理记录（拆分管理员-用户 N:M）
+Administrator "1" --> "0..*" UserManagementRecord : operates
+UserManagementRecord "0..*" --> "1" User : logs
+
+%% 依赖关系：服务类依赖实体类
 AuthenticationService ..> User : authenticates
 UserManagementService ..> User : manages
-UserManagementService ..> Reservation : processes related records
+UserManagementService ..> UserManagementRecord : creates
 ClassroomManagementService ..> Classroom : manages
 ClassroomManagementService ..> ClassroomTimeSlot : maintains
-ClassroomManagementService ..> Reservation : checks related records
+ClassroomManagementService ..> ClassroomManagementRecord : creates
 ReservationService ..> TeacherStudentUser : serves
 ReservationService ..> Classroom : queries
 ReservationService ..> ClassroomTimeSlot : checks conflict
