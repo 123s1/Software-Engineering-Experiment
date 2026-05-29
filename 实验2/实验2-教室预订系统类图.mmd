@@ -1,0 +1,106 @@
+classDiagram
+direction LR
+
+class User {
+  +String userId
+  +String account
+  +String userName
+  +String passwordHash
+  +String contactInfo
+  +String userStatus
+  +login(account, password)
+  +changePassword(oldPassword, newPassword)
+}
+
+class Administrator {
+  +addUser(userInfo)
+  +deleteUser(userId)
+  +addClassroom(classroomInfo)
+  +deleteClassroom(classroomId)
+  +setAvailableTimeSlot(classroomId, slotInfo)
+  +viewReservations(startDate, endDate)
+}
+
+class TeacherStudentUser {
+  +String identityType
+  +searchAvailableClassrooms(date, startSection, endSection)
+  +reserveClassroom(classroomId, slotId, purpose)
+}
+
+class Classroom {
+  +String classroomId
+  +String classroomName
+  +String location
+  +int capacity
+  +String equipmentInfo
+  +String classroomStatus
+  +isReservable()
+  +enable()
+  +disable()
+}
+
+class ClassroomTimeSlot {
+  +String slotId
+  +Date useDate
+  +int startSection
+  +int endSection
+  +String slotStatus
+  +isAvailable()
+  +overlapsWith(slot)
+  +markReserved()
+  +release()
+}
+
+class Reservation {
+  +String reservationId
+  +String purpose
+  +DateTime createTime
+  +String reservationStatus
+  +confirm()
+  +cancel()
+}
+
+class AuthenticationService {
+  +authenticate(account, password)
+  +updatePassword(userId, oldPassword, newPassword)
+}
+
+class UserManagementService {
+  +createUser(userInfo)
+  +disableUser(userId)
+  +validateUserUniqueness(account)
+  +handleUserReservations(userId)
+}
+
+class ClassroomManagementService {
+  +createClassroom(classroomInfo)
+  +disableClassroom(classroomId)
+  +assignTimeSlot(classroomId, slotInfo)
+  +validateTimeSlot(classroomId, slotInfo)
+}
+
+class ReservationService {
+  +queryAvailableClassrooms(date, startSection, endSection)
+  +validateConflict(classroomId, slotId)
+  +createReservation(userId, classroomId, slotId, purpose)
+  +cancelReservation(reservationId)
+  +queryReservations(startDate, endDate)
+}
+
+User <|-- Administrator
+User <|-- TeacherStudentUser
+TeacherStudentUser "1" --> "0..*" Reservation : submits
+Classroom "1" *-- "0..*" ClassroomTimeSlot : contains
+Reservation "0..*" --> "1" Classroom : targets
+Reservation "0..*" --> "1" ClassroomTimeSlot : occupies
+
+AuthenticationService ..> User : authenticates
+UserManagementService ..> User : manages
+UserManagementService ..> Reservation : processes related records
+ClassroomManagementService ..> Classroom : manages
+ClassroomManagementService ..> ClassroomTimeSlot : maintains
+ClassroomManagementService ..> Reservation : checks related records
+ReservationService ..> TeacherStudentUser : serves
+ReservationService ..> Classroom : queries
+ReservationService ..> ClassroomTimeSlot : checks conflict
+ReservationService ..> Reservation : creates
