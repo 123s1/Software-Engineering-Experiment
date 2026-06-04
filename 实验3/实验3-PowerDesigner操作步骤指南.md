@@ -727,3 +727,49 @@ END
 > 2. **管理员 ↔ 教室（管理关系）**：多个管理员可管理多个教室。通过 `ClassroomMgmtRecord`（教室管理记录）拆分为：Administrator (1) → (0..*) ClassroomMgmtRecord，ClassroomMgmtRecord (0..*) → (1) Classroom。
 >
 > 3. **管理员 ↔ 师生（管理关系）**：多个管理员可管理多名师生。通过 `UserMgmtRecord`（用户管理记录）拆分为：Administrator (1) → (0..*) UserMgmtRecord，UserMgmtRecord (0..*) → (1) TeacherStudent。
+
+
+---
+
+## 10. 用 SQL 反向工程生成 PDM（本次推荐流程）
+
+第 2~6 节是“先画 CDM，再正向生成 PDM”的做法。如果你想**直接用现成的 MySQL 建表脚本反向生成 PDM**（本次实验采用的方式），按下面步骤操作。建表脚本见 `实验3-教室预订系统建表脚本.sql`，已是 MySQL 格式（InnoDB + utf8 + 列注释），并包含 8 张表、2 个视图、3 个存储过程。
+
+### 10.1 反向工程步骤（Power Designer 15.1 中文版）
+
+1. 打开 Power Designer 15.1。
+2. 菜单 **文件（File）** → **反向工程（Reverse Engineer）** → **数据库（Database...）**。
+   - 也可以：**文件 → 新建模型 → Physical Data Model**，建好空 PDM 后，再用菜单 **数据库（Database）** → **反向工程数据库（Update Model from Database / Reverse Engineer Database）**。
+3. 在弹出的 **New Physical Data Model** 窗口里：
+   - **DBMS** 选择 **MySQL 5.0**（PD 15.1 内置的 MySQL 版本）。
+   - Model name 填 `教室预订系统PDM`。
+4. 选择反向工程来源为 **Using script files（使用脚本文件）**，点 **Add（添加）**，选中 `实验3-教室预订系统建表脚本.sql`。
+5. 点 **确定（OK）**，PD 会解析脚本并自动生成：
+   - 8 张表及其主键、唯一键、索引；
+   - 表之间的外键连线（10 条）；
+   - 2 个视图（View）；
+   - 3 个存储过程（Procedure）。
+6. 反向完成后，在画布上拖动表，把布局摆整齐（继承父表 t_user 放上方，子表/中间表放下方）。
+
+### 10.2 查看视图与存储过程
+
+视图和存储过程一般**不显示在关系图上**，到左侧 **浏览器（Browser）** 面板里看：
+
+- 展开 PDM 模型 → **Views（视图）** 节点 → 双击 `v_available_classroom` / `v_reservation_detail` → 在属性窗口的 **SQL Query / Definition** 标签里能看到 SQL，可直接截图。
+- 展开 PDM 模型 → **Procedures（存储过程）** 节点 → 双击 `sp_reserve_classroom` 等 → 在 **Definition** 标签里能看到过程体，可直接截图。
+
+### 10.3 需要截图放进报告的内容
+
+1. 反向工程向导里 **DBMS=MySQL 5.0 + 选中 SQL 脚本** 的截图（证明是用 SQL 反向生成）。
+2. PDM 物理模型全图（8 张表 + 外键连线）。
+3. 某张含主外键的表（如 `t_reservation`）的列定义截图。
+4. 2 个视图的 SQL 定义截图。
+5. 3 个存储过程的定义截图。
+6. 用户继承关系（t_user 与 t_administrator / t_teacher_student 的外键）截图。
+
+### 10.4 注意事项（PD 15.1 + MySQL）
+
+- DBMS 必须选 **MySQL 5.0**，否则解析 `ENGINE=InnoDB`、`KEY`、`AUTO_INCREMENT` 等 MySQL 方言时可能报错。
+- 脚本里的存储过程使用了 `DELIMITER $$ ... $$`，这是 MySQL 客户端分隔符写法。PD 15.1 反向工程一般能识别；若个别版本未能把存储过程导入成 Procedure 对象，可改用**连接数据库反向工程**（先把脚本在 MySQL 里执行建好库，再用 PD 的 **Database → Reverse Engineer → Using a data source** 连库反向），或在 PDM 里手动新建 Procedure 把过程体粘进去。
+- 列上的 `COMMENT` 会被 PD 反向成各字段的 **Comment（注释）**，报告里字段说明可直接用。
+- 脚本已去掉 `CHECK` 约束（MySQL 5.x 不强制、且对 PD 反向工程不友好），“开始课时 ≤ 结束课时”“同教室同日期课时不重叠”改为业务规则，在应用层或存储过程中校验。
