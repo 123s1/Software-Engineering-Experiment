@@ -1,0 +1,87 @@
+erDiagram
+
+    t_user {
+        VARCHAR user_id PK "用户唯一编号"
+        VARCHAR account UK "登录账号"
+        VARCHAR user_name "用户姓名"
+        VARCHAR password "密码"
+        VARCHAR contact_info "联系方式"
+        VARCHAR user_status "状态: ACTIVE/DISABLED"
+    }
+
+    t_administrator {
+        VARCHAR admin_id PK "管理员唯一编号"
+        VARCHAR user_id FK "关联用户编号(继承)"
+    }
+
+    t_teacher_student {
+        VARCHAR ts_id PK "师生用户唯一编号"
+        VARCHAR user_id FK "关联用户编号(继承)"
+        VARCHAR identity_type "身份类型: TEACHER/STUDENT"
+    }
+
+    t_classroom {
+        VARCHAR classroom_id PK "教室唯一编号"
+        VARCHAR classroom_name "教室名称"
+        VARCHAR location "教室位置"
+        INT capacity "教室容量"
+        VARCHAR equipment_info "设备信息"
+        VARCHAR classroom_status "状态: AVAILABLE/DISABLED"
+    }
+
+    t_classroom_time_slot {
+        VARCHAR slot_id PK "时间段唯一编号"
+        VARCHAR classroom_id FK "所属教室编号"
+        DATE use_date "使用日期"
+        INT start_section "开始课时"
+        INT end_section "结束课时"
+        VARCHAR slot_status "状态: FREE/RESERVED/UNAVAILABLE"
+    }
+
+    t_reservation {
+        VARCHAR reservation_id PK "预订记录唯一编号"
+        VARCHAR ts_id FK "申请人(师生)编号"
+        VARCHAR classroom_id FK "被预订教室编号"
+        VARCHAR slot_id FK "占用时间段编号"
+        VARCHAR purpose "预订用途"
+        VARCHAR reservation_status "状态: CREATED/CANCELLED/FINISHED"
+        DATETIME create_time "预订创建时间"
+    }
+
+    t_classroom_mgmt_record {
+        VARCHAR record_id PK "管理记录唯一编号"
+        VARCHAR admin_id FK "操作人(管理员)编号"
+        VARCHAR classroom_id FK "被操作教室编号"
+        VARCHAR operation_type "操作类型: ADD/DELETE/SET_TIMESLOT"
+        DATETIME operation_time "操作时间"
+        VARCHAR remarks "备注信息"
+    }
+
+    t_user_mgmt_record {
+        VARCHAR record_id PK "管理记录唯一编号"
+        VARCHAR admin_id FK "操作人(管理员)编号"
+        VARCHAR target_ts_id FK "被操作目标师生编号"
+        VARCHAR operation_type "操作类型: ENABLE/DISABLE"
+        DATETIME operation_time "操作时间"
+        VARCHAR remarks "备注信息"
+    }
+
+    %% 继承关系：管理员和师生继承自用户
+    t_user ||--o| t_administrator : "继承"
+    t_user ||--o| t_teacher_student : "继承"
+
+    %% 教室 与 教室可用时间段 (1:N)
+    t_classroom ||--o{ t_classroom_time_slot : "包含"
+
+    %% 预订记录 拆分 师生-教室 N:M 关系
+    t_teacher_student ||--o{ t_reservation : "发起预订"
+    t_classroom ||--o{ t_reservation : "被预订"
+    t_classroom_time_slot ||--o{ t_reservation : "被占用"
+
+    %% 教室管理记录 拆分 管理员-教室 N:M 关系
+    t_administrator ||--o{ t_classroom_mgmt_record : "管理教室"
+    t_classroom ||--o{ t_classroom_mgmt_record : "被管理"
+
+    %% 用户管理记录 拆分 管理员-师生 N:M 关系
+    t_administrator ||--o{ t_user_mgmt_record : "管理用户"
+    t_teacher_student ||--o{ t_user_mgmt_record : "被管理"
