@@ -5,103 +5,101 @@
 <meta name="viewport" content="width=1600">
 <title>教室预订系统 - 用户界面设计（实验4）</title>
 <style>
-/* === RESET & BASE === */
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#e8e8e8; display:flex; height:100vh; overflow:hidden; font-size:14px; }
 
-/* === LEFT SIDEBAR (Page Tree) === */
+/* === LEFT SIDEBAR === */
 #sidebar { width:220px; background:#fff; border-right:2px solid #999; overflow-y:auto; flex-shrink:0; padding:6px 0; }
 #sidebar .tree-title { font-weight:bold; font-size:13px; padding:6px 10px; background:#3a7bd5; color:#fff; margin-bottom:4px; }
 #sidebar .tree-section { font-weight:bold; font-size:13px; padding:4px 10px; cursor:default; color:#333; }
 #sidebar .tree-item { padding:3px 10px 3px 24px; cursor:pointer; font-size:13px; color:#333; white-space:nowrap; }
 #sidebar .tree-item:hover { background:#e0eaff; }
 #sidebar .tree-item.active { background:#3a7bd5; color:#fff; }
-#sidebar .tree-sub { padding:3px 10px 3px 38px; cursor:pointer; font-size:12px; color:#555; }
-#sidebar .tree-sub:hover { background:#e0eaff; }
-#sidebar .tree-sub.active { background:#3a7bd5; color:#fff; }
 #sidebar .tree-divider { border-top:1px solid #ccc; margin:6px 0; }
 
 /* === MAIN CANVAS === */
 #canvas-wrap { flex:1; overflow:auto; background:#c0c0c0; padding:20px; }
-#canvas { background:#fff; border:1px solid #999; width:1460px; min-height:820px; position:relative; padding:30px 40px; }
-/* main content kept on the left ~820px so yellow annotations sit in the right margin */
-.wf-form { max-width:820px; }
-.wf-table { width:820px; }
-.wf-nav { max-width:820px; }
+#canvas { background:#fff; border:1px solid #999; width:1460px; min-height:850px; position:relative; padding:30px 40px; }
 
 /* === WIREFRAME ELEMENTS === */
-.page-title { font-size:28px; font-weight:bold; text-align:center; margin-bottom:10px; letter-spacing:2px; }
+.page-title { font-size:28px; font-weight:bold; text-align:center; margin-bottom:8px; letter-spacing:2px; }
 .welcome { font-size:14px; color:#333; margin-bottom:16px; }
-.wf-section-title { font-size:18px; font-weight:bold; margin:20px 0 10px; padding-bottom:4px; border-bottom:2px solid #333; display:inline-block; }
 
 /* form groups */
-.wf-form { border:2px solid #333; padding:16px 20px; margin:10px 0; background:#fff; }
+.wf-form { border:2px solid #333; padding:16px 20px; margin:10px 0; background:#fff; position:relative; }
 .wf-form-title { font-weight:bold; font-size:16px; margin-bottom:12px; }
-.wf-row { display:flex; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px; }
-.wf-label { min-width:120px; text-align:right; padding-right:8px; font-size:14px; }
-.wf-input { border:2px solid #333; height:30px; padding:2px 8px; font-size:14px; min-width:200px; background:#fff; }
-.wf-input-sm { min-width:100px; width:100px; }
-.wf-select { border:2px solid #333; height:30px; font-size:14px; min-width:140px; background:#fff; padding:2px 6px; }
-.wf-textarea { border:2px solid #333; padding:6px 8px; font-size:14px; min-width:300px; min-height:60px; background:#fff; resize:none; }
+.wf-row { display:flex; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px; position:relative; }
+.wf-label { min-width:100px; text-align:right; padding-right:8px; font-size:14px; }
+.wf-input { border:2px solid #333; height:30px; padding:2px 8px; font-size:14px; min-width:180px; background:#fff; }
+.wf-input-sm { min-width:80px; width:100px; }
+.wf-select { border:2px solid #333; height:30px; font-size:14px; min-width:120px; background:#fff; padding:2px 6px; }
+.wf-textarea { border:2px solid #333; padding:6px 8px; font-size:14px; min-width:280px; min-height:50px; background:#fff; resize:none; }
 .wf-btn { border:2px solid #333; background:#fff; padding:4px 20px; font-size:14px; cursor:pointer; font-weight:bold; height:32px; }
 .wf-btn:hover { background:#eee; }
 .wf-btn-primary { background:#4a90d9; color:#fff; border-color:#2a6ab9; }
-.wf-btn-danger { background:#d9534f; color:#fff; border-color:#b94a48; }
 
 /* tables */
-.wf-table { border-collapse:collapse; width:820px; margin:10px 0; }
-.wf-table th, .wf-table td { border:2px solid #333; padding:6px 10px; text-align:center; font-size:13px; }
+.wf-table { border-collapse:collapse; margin:10px 0; }
+.wf-table th, .wf-table td { border:2px solid #333; padding:5px 8px; text-align:center; font-size:13px; }
 .wf-table th { background:#ddd; font-weight:bold; }
 .wf-table td { background:#fff; }
-.wf-table .op-link { color:#0066cc; text-decoration:underline; cursor:pointer; margin:0 4px; }
+.wf-table .op-link { color:#0066cc; text-decoration:underline; cursor:pointer; margin:0 3px; }
 
-/* image placeholder */
-.wf-img-placeholder { border:2px solid #333; width:120px; height:80px; position:relative; overflow:hidden; display:inline-block; }
-.wf-img-placeholder::before, .wf-img-placeholder::after { content:''; position:absolute; background:#333; }
-.wf-img-placeholder::before { width:170px; height:2px; top:40px; left:-25px; transform:rotate(33deg); transform-origin:left; }
-.wf-img-placeholder::after { width:170px; height:2px; bottom:40px; left:-25px; transform:rotate(-33deg); transform-origin:left; }
-
-/* nav menu inside page */
+/* nav menu */
 .wf-nav { display:flex; gap:0; margin:10px 0; }
-.wf-nav-item { border:2px solid #333; padding:8px 20px; background:#eee; font-weight:bold; cursor:pointer; font-size:14px; }
+.wf-nav-item { border:2px solid #333; padding:8px 18px; background:#eee; font-weight:bold; cursor:pointer; font-size:14px; }
 .wf-nav-item.active { background:#4a90d9; color:#fff; border-color:#2a6ab9; }
 
-/* EXIT button (top-right) */
+/* EXIT button */
 .exit-btn { position:absolute; top:20px; right:30px; border:2px solid #333; padding:6px 20px; font-size:16px; font-weight:bold; background:#fff; cursor:pointer; }
 
-/* === YELLOW ANNOTATION BOXES === */
-.anno { position:absolute; background:#ffd700; border:2px solid #cc9900; padding:8px 12px; font-size:13px; color:#333; line-height:1.5; max-width:280px; z-index:10; box-shadow:2px 2px 4px rgba(0,0,0,0.15); }
+/* === YELLOW ANNOTATION BOX === */
+.anno { background:#ffd700; border:2px solid #cc9900; padding:8px 12px; font-size:13px; color:#333; line-height:1.6; box-shadow:2px 2px 4px rgba(0,0,0,0.15); margin:8px 0; display:inline-block; vertical-align:top; }
 .anno strong { color:#c00; }
-.anno .anno-title { font-weight:bold; color:#c00; margin-bottom:2px; }
 
-/* numbered callout circles */
-.callout { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#c00; color:#fff; font-size:12px; font-weight:bold; position:absolute; z-index:11; }
-.callout-inline { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:#c00; color:#fff; font-size:11px; font-weight:bold; vertical-align:middle; margin:0 2px; }
+/* Absolute-positioned annotation (for placing near specific elements) */
+.anno-abs { position:absolute; z-index:10; max-width:300px; }
 
-/* page container */
-.page { display:none; position:relative; }
+/* === RED CALLOUT CIRCLE (placed ON the element) === */
+.cn { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#c00; color:#fff; font-size:12px; font-weight:bold; vertical-align:middle; margin:0 2px; flex-shrink:0; }
+
+/* === BLUE WIDGET NAME (Axure-style, top-right of element) === */
+.wname { font-size:11px; color:#1a73e8; font-weight:bold; display:inline-block; margin:0 4px; vertical-align:middle; }
+.wname-block { font-size:11px; color:#1a73e8; font-weight:bold; display:block; margin-bottom:2px; }
+
+/* page */
+.page { display:none; }
 .page.active { display:block; }
 
-/* flex helpers */
+/* section title */
+.sec-title { font-size:18px; font-weight:bold; margin:18px 0 10px; padding-bottom:4px; border-bottom:2px solid #333; display:inline-block; }
+
+/* layout helpers */
 .flex { display:flex; }
-.flex-center { justify-content:center; align-items:center; }
 .gap20 { gap:20px; }
 .gap10 { gap:10px; }
 .mt10 { margin-top:10px; }
 .mt20 { margin-top:20px; }
 .mb10 { margin-bottom:10px; }
 .ml20 { margin-left:20px; }
-.text-center { text-align:center; }
-.relative { position:relative; }
-
-/* login page centering */
-.login-box { width:460px; margin:80px auto 0; }
 
 /* dashboard cards */
-.dash-card { border:2px solid #333; padding:20px 30px; text-align:center; cursor:pointer; min-width:180px; background:#fff; }
+.dash-card { border:2px solid #333; padding:18px 28px; text-align:center; cursor:pointer; min-width:160px; background:#fff; }
 .dash-card:hover { background:#f0f6ff; }
-.dash-card .card-icon { font-size:36px; margin-bottom:8px; }
+.dash-card .card-icon { font-size:36px; margin-bottom:6px; }
 .dash-card .card-label { font-size:16px; font-weight:bold; }
+
+/* Two-column layout: content left, annotations right */
+.two-col { display:flex; gap:30px; align-items:flex-start; }
+.col-content { flex:0 0 820px; min-width:0; }
+.col-anno { flex:0 0 480px; min-width:0; }
+
+/* login centering */
+.login-box { width:440px; margin:60px auto 0; }
+
+/* success/fail boxes */
+.result-ok { border:2px solid #090; background:#f0fff0; padding:10px 16px; margin:8px 0; }
+.result-fail { border:2px solid #c00; background:#fff0f0; padding:10px 16px; margin:8px 0; }
 </style>
 </head>
 <body>
@@ -131,72 +129,62 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
 <div id="canvas-wrap">
 <div id="canvas">
 
-<!-- ======================== PAGE 1: 登录页 ======================== -->
+<!-- ====================== PAGE: 登录页 ====================== -->
 <div class="page active" id="page-login">
   <div class="page-title">教室预订系统</div>
-  <div class="text-center mb10" style="font-size:15px;color:#666;">Classroom Reservation System</div>
-  
-  <div class="login-box">
-    <div class="wf-form">
-      <div class="wf-form-title text-center" style="font-size:20px; margin-bottom:20px;">用 户 登 录</div>
-      <div class="wf-row">
-        <span class="wf-label">登录账号：</span>
-        <input class="wf-input" placeholder="请输入账号 (account)" style="width:260px;">
-        <span class="callout-inline">1</span>
+  <div style="text-align:center;font-size:14px;color:#666;margin-bottom:10px;">Classroom Reservation System</div>
+
+  <div class="two-col">
+    <div class="col-content">
+      <div class="login-box">
+        <div class="wf-form">
+          <div class="wf-form-title" style="text-align:center;font-size:20px;margin-bottom:20px;">用 户 登 录</div>
+          <div class="wf-row">
+            <span class="wf-label">登录账号：</span>
+            <span class="wname">账号输入框</span>
+            <input class="wf-input" placeholder="请输入账号" style="width:240px;">
+            <span class="cn">1</span>
+          </div>
+          <div class="wf-row">
+            <span class="wf-label">登录密码：</span>
+            <span class="wname">密码输入框</span>
+            <input class="wf-input" type="password" placeholder="请输入密码" style="width:240px;">
+            <span class="cn">2</span>
+          </div>
+          <div class="wf-row" style="justify-content:center; margin-top:20px; gap:30px;">
+            <span class="wname">登录按钮</span>
+            <button class="wf-btn wf-btn-primary" style="width:110px;">登 录</button>
+            <span class="cn">3</span>
+            <span class="wname">重置按钮</span>
+            <button class="wf-btn" style="width:110px;">重 置</button>
+            <span class="cn">4</span>
+          </div>
+        </div>
       </div>
-      <div class="wf-row">
-        <span class="wf-label">登录密码：</span>
-        <input class="wf-input" type="password" placeholder="请输入密码" style="width:260px;">
-        <span class="callout-inline">2</span>
+    </div>
+    <div class="col-anno">
+      <div class="anno">
+        <span class="cn">1</span> <strong>账号输入框</strong>：用户输入由管理员分配的唯一登录账号，账号不能为空。若输入的账号不存在，点击登录后弹出提示"该账号不存在"。
       </div>
-      <div class="wf-row" style="justify-content:center; margin-top:20px; gap:30px;">
-        <button class="wf-btn wf-btn-primary" style="width:120px;">登 录</button>
-        <span class="callout-inline">3</span>
-        <button class="wf-btn" style="width:120px;">重 置</button>
+      <div class="anno">
+        <span class="cn">2</span> <strong>密码输入框</strong>：掩码显示（*号），输入内容不可见。密码不能为空，输入错误点击登录后弹出提示"密码错误"。
+      </div>
+      <div class="anno">
+        <span class="cn">3</span> <strong>点击【登录】按钮</strong>：首先校验账号和密码是否为空，为空则弹出提示"请输入账号/密码"。验证通过后，<strong>系统根据用户角色自动跳转：管理员→管理员首页，师生→师生首页。</strong>若账号已被停用(DISABLED)，弹出提示"该账号已被停用，请联系管理员"。
+      </div>
+      <div class="anno">
+        <span class="cn">4</span> <strong>点击【重置】按钮</strong>：清空账号和密码输入框的内容，恢复到初始状态。
       </div>
     </div>
   </div>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:90px; right:40px; max-width:300px;">
-    <div class="anno-title"><span class="callout-inline">1</span> 账号字段 (account)</div>
-    对应数据库 t_user.account，VARCHAR(50)。<br>
-    <strong>登录时系统根据 account 查询用户表，校验用户是否存在。</strong><br>
-    账号在增加用户时由管理员分配，具有唯一性约束(uk_user_account)。
-  </div>
-
-  <div class="anno" style="top:230px; right:40px; max-width:300px;">
-    <div class="anno-title"><span class="callout-inline">2</span> 密码字段 (password)</div>
-    对应 t_user.password，VARCHAR(128)。<br>
-    <strong>输入框掩码显示，密码建议哈希存储。</strong>
-  </div>
-
-  <div class="anno" style="top:380px; right:40px; max-width:320px;">
-    <div class="anno-title"><span class="callout-inline">3</span> 登录按钮交互</div>
-    点击"登录"：<br>
-    1. 校验账号和密码是否为空<br>
-    2. 查询 t_user 验证 account + password<br>
-    3. 检查 user_status 是否为 ACTIVE<br>
-    <strong>登录成功后，系统根据角色跳转：<br>
-    · 管理员(t_administrator) → 管理员首页<br>
-    · 师生(t_teacher_student) → 师生首页</strong><br>
-    <strong>失败提示：</strong>账号不存在 / 密码错误 / 账号已停用(DISABLED)
-  </div>
-
-  <div class="anno" style="bottom:40px; left:40px; max-width:300px;">
-    <div class="anno-title">页面说明</div>
-    登录页为系统入口，所有用户（管理员、师生）均通过此页面进入系统。<br>
-    <strong>登录后系统建立会话(Session)，后续操作均需已登录状态。</strong><br>
-    "重置"按钮清空输入框内容。
-  </div>
 </div>
 
-<!-- ======================== PAGE 2: 修改密码页 ======================== -->
+<!-- ====================== PAGE: 修改密码页 ====================== -->
 <div class="page" id="page-changepwd">
   <div class="page-title">教室预订系统</div>
-  <div class="exit-btn" onclick="showPage('login')">退出登录</div>
+  <div class="exit-btn" onclick="showPage('login')">退出登录 <span class="cn">5</span></div>
   <div class="welcome">欢迎，张三 | 当前角色：师生用户</div>
-  
+
   <div class="wf-nav">
     <div class="wf-nav-item" onclick="showPage('stu-home')">首页</div>
     <div class="wf-nav-item" onclick="showPage('query-room')">查询教室</div>
@@ -204,232 +192,231 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     <div class="wf-nav-item active">修改密码</div>
   </div>
 
-  <div class="wf-section-title">修改密码</div>
+  <div class="sec-title">修改密码</div>
 
-  <div style="width:500px; margin-top:16px;">
-    <div class="wf-form">
-      <div class="wf-row">
-        <span class="wf-label">当前账号：</span>
-        <span style="font-weight:bold;">zhangsan</span>
-        <span class="callout-inline">1</span>
+  <div class="two-col">
+    <div class="col-content">
+      <div class="wf-form" style="max-width:500px;">
+        <div class="wf-row">
+          <span class="wf-label">当前账号：</span>
+          <span class="wname">账号显示</span>
+          <span style="font-weight:bold;">zhangsan</span>（只读，不可编辑）
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">旧密码：</span>
+          <span class="wname">旧密码输入框</span>
+          <input class="wf-input" type="password" style="width:240px;">
+          <span class="cn">1</span>
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">新密码：</span>
+          <span class="wname">新密码输入框</span>
+          <input class="wf-input" type="password" style="width:240px;">
+          <span class="cn">2</span>
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">确认新密码：</span>
+          <span class="wname">确认密码输入框</span>
+          <input class="wf-input" type="password" style="width:240px;">
+          <span class="cn">3</span>
+        </div>
+        <div class="wf-row" style="justify-content:center; margin-top:16px;">
+          <span class="wname">保存按钮</span>
+          <button class="wf-btn wf-btn-primary">保存修改</button>
+          <span class="cn">4</span>
+        </div>
       </div>
-      <div class="wf-row">
-        <span class="wf-label">旧密码：</span>
-        <input class="wf-input" type="password" style="width:260px;">
-        <span class="callout-inline">2</span>
+    </div>
+    <div class="col-anno">
+      <div class="anno">
+        <span class="cn">1</span> <strong>旧密码输入框</strong>：用户必须先输入当前使用的旧密码进行身份验证。输入错误点击保存后弹出提示"旧密码不正确"。
       </div>
-      <div class="wf-row">
-        <span class="wf-label">新密码：</span>
-        <input class="wf-input" type="password" style="width:260px;">
-        <span class="callout-inline">3</span>
+      <div class="anno">
+        <span class="cn">2</span> <strong>新密码输入框</strong>：输入新的登录密码。新密码不能与旧密码相同，否则弹出提示"新密码不能与旧密码相同"。
       </div>
-      <div class="wf-row">
-        <span class="wf-label">确认新密码：</span>
-        <input class="wf-input" type="password" style="width:260px;">
+      <div class="anno">
+        <span class="cn">3</span> <strong>确认密码输入框</strong>：再次输入新密码进行确认。两次输入必须一致，不一致则弹出提示"两次输入的密码不一致"。
       </div>
-      <div class="wf-row" style="justify-content:center; margin-top:16px;">
-        <button class="wf-btn wf-btn-primary">保存修改</button>
-        <span class="callout-inline">4</span>
+      <div class="anno">
+        <span class="cn">4</span> <strong>点击【保存修改】按钮</strong>：依次校验：旧密码是否正确→新密码格式是否合规→两次输入是否一致。<strong>全部通过后弹出确认对话框"确定修改密码？"，确认后密码立即生效</strong>，下次登录使用新密码。
+      </div>
+      <div class="anno">
+        <span class="cn">5</span> <strong>点击【退出登录】按钮</strong>：弹出确认对话框"确定退出登录？"，确认后清除登录状态，返回登录页。
       </div>
     </div>
   </div>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:160px; right:40px; max-width:280px;">
-    <div class="anno-title"><span class="callout-inline">1</span> 当前账号（只读）</div>
-    显示当前登录用户的 account，不可编辑。<br>
-    <strong>修改密码必须在已登录状态下操作。</strong>
-  </div>
-  <div class="anno" style="top:250px; right:40px; max-width:280px;">
-    <div class="anno-title"><span class="callout-inline">2</span> 旧密码验证</div>
-    <strong>系统先校验旧密码是否正确（与 t_user.password 比对），不正确则拒绝修改。</strong>
-  </div>
-  <div class="anno" style="top:340px; right:40px; max-width:280px;">
-    <div class="anno-title"><span class="callout-inline">3</span> 新密码规则</div>
-    新密码应满足基本安全规则（长度、复杂度）。<br>
-    <strong>"新密码"与"确认新密码"必须一致，不一致则提示错误。</strong>
-  </div>
-  <div class="anno" style="top:450px; right:40px; max-width:280px;">
-    <div class="anno-title"><span class="callout-inline">4</span> 保存修改交互</div>
-    点击"保存修改"：<br>
-    1. 校验旧密码 → 2. 校验新密码格式 → 3. 两次输入一致 → 4. 更新 t_user.password<br>
-    <strong>修改成功后立即生效，后续登录使用新密码。</strong><br>
-    失败提示：旧密码错误 / 格式不合规 / 两次不一致
-  </div>
 </div>
 
-<!-- ======================== PAGE 3: 师生首页 ======================== -->
+<!-- ====================== PAGE: 师生首页 ====================== -->
 <div class="page" id="page-stu-home">
   <div class="page-title">教室预订系统</div>
   <div class="exit-btn" onclick="showPage('login')">退出登录</div>
   <div class="welcome">欢迎，张三 | 当前角色：师生用户 | 身份：TEACHER</div>
-  
+
   <div class="wf-nav">
-    <div class="wf-nav-item active" onclick="showPage('stu-home')">首页</div>
-    <div class="wf-nav-item" onclick="showPage('query-room')">查询教室</div>
-    <div class="wf-nav-item" onclick="showPage('my-reserve')">我的预订</div>
-    <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
+    <div class="wf-nav-item active">首页</div>
+    <div class="wf-nav-item" onclick="showPage('query-room')">查询教室 <span class="cn">1</span></div>
+    <div class="wf-nav-item" onclick="showPage('my-reserve')">我的预订 <span class="cn">2</span></div>
+    <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码 <span class="cn">3</span></div>
   </div>
 
-  <div class="wf-section-title">师生功能中心</div>
+  <div class="sec-title">师生功能中心</div>
 
-  <div class="flex gap20 mt20" style="flex-wrap:wrap;">
-    <div class="dash-card" onclick="showPage('query-room')">
-      <div class="card-icon">🔍</div>
-      <div class="card-label">空闲教室查询</div>
-      <div style="font-size:12px;color:#666;margin-top:4px;">查看可预订教室</div>
+  <div class="two-col">
+    <div class="col-content">
+      <div class="flex gap20 mt10" style="flex-wrap:wrap;">
+        <div class="dash-card" onclick="showPage('query-room')">
+          <div class="card-icon">🔍</div>
+          <div class="card-label">空闲教室查询</div>
+          <div style="font-size:12px;color:#666;margin-top:4px;">查看可预订的教室</div>
+        </div>
+        <div class="dash-card" onclick="showPage('my-reserve')">
+          <div class="card-icon">📋</div>
+          <div class="card-label">我的预订</div>
+          <div style="font-size:12px;color:#666;margin-top:4px;">查看/取消预订</div>
+        </div>
+        <div class="dash-card" onclick="showPage('changepwd')">
+          <div class="card-icon">🔑</div>
+          <div class="card-label">修改密码</div>
+          <div style="font-size:12px;color:#666;margin-top:4px;">更改登录密码</div>
+        </div>
+      </div>
     </div>
-    <div class="dash-card" onclick="showPage('my-reserve')">
-      <div class="card-icon">📋</div>
-      <div class="card-label">我的预订</div>
-      <div style="font-size:12px;color:#666;margin-top:4px;">查看/取消预订</div>
+    <div class="col-anno">
+      <div class="anno">
+        <span class="cn">1</span> <strong>点击【查询教室】</strong>：跳转到空闲教室查询页面，可按日期和课时范围搜索当前可预订的教室。
+      </div>
+      <div class="anno">
+        <span class="cn">2</span> <strong>点击【我的预订】</strong>：跳转到我的预订页面，查看自己提交的所有预订记录，可以取消尚未使用的预订。
+      </div>
+      <div class="anno">
+        <span class="cn">3</span> <strong>点击【修改密码】</strong>：跳转到修改密码页面，修改当前登录密码。
+      </div>
+      <div class="anno">
+        <strong>页面说明：</strong>师生登录后进入此页面。师生用户<strong>只能</strong>使用查询教室、预订教室、查看预订、修改密码功能，<strong>不能进入用户管理、教室管理等管理员功能</strong>。导航栏和功能卡片只展示师生权限范围内的功能。
+      </div>
     </div>
-    <div class="dash-card" onclick="showPage('changepwd')">
-      <div class="card-icon">🔑</div>
-      <div class="card-label">修改密码</div>
-      <div style="font-size:12px;color:#666;margin-top:4px;">更改登录密码</div>
-    </div>
-  </div>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:100px; right:40px; max-width:300px;">
-    <div class="anno-title">师生首页说明</div>
-    师生登录后进入此页面。<br>
-    <strong>顶部导航栏展示师生可使用的功能入口。<br>
-    师生用户只能执行查询和预订操作，不能进入管理功能。</strong><br>
-    显示当前用户的 user_name 和 identity_type（TEACHER/STUDENT）。
-  </div>
-  <div class="anno" style="top:340px; right:40px; max-width:280px;">
-    <div class="anno-title">权限控制</div>
-    <strong>师生端不显示"用户管理""教室管理""时间段设置"等管理员功能。<br>
-    无权限用户不能通过URL直接访问管理页面。</strong>
   </div>
 </div>
 
-<!-- ======================== PAGE 4: 空闲教室查询页 ======================== -->
+<!-- ====================== PAGE: 空闲教室查询页 ====================== -->
 <div class="page" id="page-query-room">
   <div class="page-title">教室预订系统</div>
   <div class="exit-btn" onclick="showPage('login')">退出登录</div>
   <div class="welcome">欢迎，张三 | 当前角色：师生用户</div>
-  
+
   <div class="wf-nav">
     <div class="wf-nav-item" onclick="showPage('stu-home')">首页</div>
-    <div class="wf-nav-item active" onclick="showPage('query-room')">查询教室</div>
+    <div class="wf-nav-item active">查询教室</div>
     <div class="wf-nav-item" onclick="showPage('my-reserve')">我的预订</div>
     <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
-  <div class="wf-section-title">空闲教室查询</div>
+  <div class="sec-title">空闲教室查询</div>
 
-  <!-- Query condition area -->
-  <div class="wf-form mt10">
-    <div class="wf-form-title">查询条件 <span class="callout-inline">1</span></div>
-    <div class="wf-row">
-      <span class="wf-label">查询日期：</span>
-      <input class="wf-input" type="date" value="2026-06-10" style="width:180px;">
-      <span class="wf-label">开始课时：</span>
-      <select class="wf-select wf-input-sm">
-        <option>第1节</option><option>第2节</option><option>第3节</option><option selected>第4节</option>
-        <option>第5节</option><option>第6节</option><option>第7节</option><option>第8节</option>
-        <option>第9节</option><option>第10节</option><option>第11节</option><option>第12节</option>
-      </select>
-      <span class="callout-inline">2</span>
-      <span class="wf-label">结束课时：</span>
-      <select class="wf-select wf-input-sm">
-        <option>第1节</option><option>第2节</option><option>第3节</option><option>第4节</option>
-        <option selected>第6节</option><option>第7节</option><option>第8节</option>
-        <option>第9节</option><option>第10节</option><option>第11节</option><option>第12节</option>
-      </select>
+  <div class="two-col">
+    <div class="col-content">
+      <div class="wf-form">
+        <div class="wf-form-title">查询条件</div>
+        <div class="wf-row">
+          <span class="wf-label">查询日期：</span>
+          <span class="wname">日期选择框</span>
+          <input class="wf-input" type="date" value="2026-06-10" style="width:160px;">
+          <span class="cn">1</span>
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">开始课时：</span>
+          <span class="wname">开始课时下拉框</span>
+          <select class="wf-select">
+            <option>第1节</option><option>第2节</option><option>第3节</option><option selected>第4节</option>
+            <option>第5节</option><option>第6节</option><option>第7节</option><option>第8节</option>
+            <option>第9节</option><option>第10节</option><option>第11节</option><option>第12节</option>
+          </select>
+          <span class="cn">2</span>
+          <span class="wf-label" style="margin-left:10px;">结束课时：</span>
+          <span class="wname">结束课时下拉框</span>
+          <select class="wf-select">
+            <option>第1节</option><option>第2节</option><option>第3节</option><option>第4节</option>
+            <option selected>第6节</option><option>第7节</option><option>第8节</option>
+            <option>第9节</option><option>第10节</option><option>第11节</option><option>第12节</option>
+          </select>
+          <span class="cn">3</span>
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">教室位置：</span>
+          <span class="wname">位置输入框</span>
+          <input class="wf-input" placeholder="可选，如：A栋3楼" style="width:160px;">
+          <span class="cn">4</span>
+          <span class="wf-label" style="margin-left:10px;">最低容量：</span>
+          <span class="wname">容量输入框</span>
+          <input class="wf-input wf-input-sm" placeholder="人数">
+          <span class="cn">5</span>
+          <span class="wname" style="margin-left:10px;">查询按钮</span>
+          <button class="wf-btn wf-btn-primary">查 询</button>
+          <span class="cn">6</span>
+        </div>
+      </div>
+
+      <div class="sec-title">查询结果</div>
+      <table class="wf-table">
+        <thead>
+          <tr>
+            <th>教室编号</th><th>教室名称</th><th>位置</th><th>容量</th>
+            <th>设备信息</th><th>可用日期</th><th>开始课时</th><th>结束课时</th><th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CR001</td><td>A101多媒体教室</td><td>A栋1楼</td><td>120</td>
+            <td>投影仪、音响</td><td>2026-06-10</td><td>第4节</td><td>第6节</td>
+            <td><span class="op-link" onclick="showPage('reserve')">预订</span> <span class="cn">7</span></td>
+          </tr>
+          <tr>
+            <td>CR003</td><td>B201阶梯教室</td><td>B栋2楼</td><td>200</td>
+            <td>投影仪、话筒</td><td>2026-06-10</td><td>第4节</td><td>第6节</td>
+            <td><span class="op-link" onclick="showPage('reserve')">预订</span></td>
+          </tr>
+          <tr>
+            <td>CR005</td><td>C305普通教室</td><td>C栋3楼</td><td>60</td>
+            <td>投影仪</td><td>2026-06-10</td><td>第5节</td><td>第6节</td>
+            <td><span class="op-link" onclick="showPage('reserve')">预订</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:12px;color:#888;">共 3 条结果</div>
     </div>
-    <div class="wf-row">
-      <span class="wf-label">教室位置：</span>
-      <input class="wf-input" placeholder="可选，如：A栋3楼" style="width:180px;">
-      <span class="wf-label">最低容量：</span>
-      <input class="wf-input wf-input-sm" placeholder="人数" style="width:100px;">
-      <span class="callout-inline">3</span>
-      <span style="margin-left:20px;">
-        <button class="wf-btn wf-btn-primary">查 询</button>
-        <span class="callout-inline">4</span>
-      </span>
+    <div class="col-anno">
+      <div class="anno">
+        <span class="cn">1</span> <strong>日期选择框</strong>：选择要查询的日期，必填项。只能选择今天或未来的日期，不能选择过去的日期。
+      </div>
+      <div class="anno">
+        <span class="cn">2</span> <strong>开始课时下拉框</strong>：选择使用教室的起始课时（第1节~第12节），必填项。
+      </div>
+      <div class="anno">
+        <span class="cn">3</span> <strong>结束课时下拉框</strong>：选择使用教室的结束课时，必填项。<strong>结束课时必须大于等于开始课时</strong>，否则点击查询后弹出提示"课时范围不合法"。
+      </div>
+      <div class="anno">
+        <span class="cn">4</span> <strong>位置输入框</strong>：可选填，输入教室所在位置（如"A栋3楼"）进行筛选。不填则不按位置过滤。
+      </div>
+      <div class="anno">
+        <span class="cn">5</span> <strong>容量输入框</strong>：可选填，输入最低容纳人数。不填则不按容量过滤。
+      </div>
+      <div class="anno">
+        <span class="cn">6</span> <strong>点击【查询】按钮</strong>：根据填写的条件搜索<strong>当前可用且时段空闲</strong>的教室。空闲条件 = 教室状态为"可用" 且 该时段状态为"空闲"，<strong>两个条件缺一不可</strong>。若无符合条件的教室，显示"当前条件下无空闲教室"，不报错。
+      </div>
+      <div class="anno">
+        <span class="cn">7</span> <strong>点击【预订】链接</strong>：跳转到教室预订页面，系统自动将该行的教室信息和时段信息带入预订页面，用户无需重复填写。
+      </div>
     </div>
-  </div>
-
-  <!-- Result table -->
-  <div class="wf-section-title mt10">查询结果</div>
-  <table class="wf-table">
-    <thead>
-      <tr>
-        <th>教室编号</th>
-        <th>教室名称</th>
-        <th>位置</th>
-        <th>容量</th>
-        <th>设备信息</th>
-        <th>可用日期</th>
-        <th>开始课时</th>
-        <th>结束课时</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>CR001</td><td>A101多媒体教室</td><td>A栋1楼</td><td>120</td>
-        <td>投影仪、音响</td><td>2026-06-10</td><td>第4节</td><td>第6节</td>
-        <td><span class="op-link" onclick="showPage('reserve')">预订</span></td>
-      </tr>
-      <tr>
-        <td>CR003</td><td>B201阶梯教室</td><td>B栋2楼</td><td>200</td>
-        <td>投影仪、话筒</td><td>2026-06-10</td><td>第4节</td><td>第6节</td>
-        <td><span class="op-link" onclick="showPage('reserve')">预订</span></td>
-      </tr>
-      <tr>
-        <td>CR005</td><td>C305普通教室</td><td>C栋3楼</td><td>60</td>
-        <td>投影仪</td><td>2026-06-10</td><td>第5节</td><td>第6节</td>
-        <td><span class="op-link" onclick="showPage('reserve')">预订</span></td>
-      </tr>
-    </tbody>
-  </table>
-  <div style="font-size:12px;color:#888;margin-top:4px;">共 3 条结果 <span class="callout-inline">5</span></div>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:100px; right:30px; max-width:300px;">
-    <div class="anno-title"><span class="callout-inline">1</span> 查询条件区</div>
-    查询条件直接对应视图 v_available_classroom 的筛选参数。<br>
-    <strong>日期(use_date)、开始课时(start_section)、结束课时(end_section) 为必填项，位置和容量为可选筛选。</strong>
-  </div>
-  <div class="anno" style="top:210px; right:30px; max-width:300px;">
-    <div class="anno-title"><span class="callout-inline">2</span> 课时选择</div>
-    <strong>时间粒度精确到"课时"</strong>（题目性能需求），用下拉框选择第1节~第12节。<br>
-    start_section 和 end_section 对应 t_classroom_time_slot 的同名字段。<br>
-    <strong>约束：start_section &le; end_section，否则提示"时间范围不合法"。</strong>
-  </div>
-  <div class="anno" style="top:340px; right:30px; max-width:300px;">
-    <div class="anno-title"><span class="callout-inline">3</span> 可选筛选条件</div>
-    位置对应 t_classroom.location；<br>容量对应 t_classroom.capacity。<br>
-    <strong>不填写则不过滤，返回所有满足时间条件的空闲教室。</strong>
-  </div>
-  <div class="anno" style="top:440px; right:30px; max-width:310px;">
-    <div class="anno-title"><span class="callout-inline">4</span> 查询按钮交互</div>
-    点击"查询"：<br>
-    系统在 v_available_classroom 中筛选同时满足：<br>
-    · classroom_status = 'AVAILABLE'<br>
-    · slot_status = 'FREE'<br>
-    · use_date/start_section/end_section 匹配<br>
-    <strong>空闲 = 教室可用 且 时段空闲，两者缺一不可。</strong>
-  </div>
-  <div class="anno" style="bottom:40px; right:30px; max-width:300px;">
-    <div class="anno-title"><span class="callout-inline">5</span> 查询结果与预订入口</div>
-    结果列表展示教室信息 + 对应空闲时段。<br>
-    <strong>若无结果，显示"当前条件下无空闲教室"，不报错。</strong><br>
-    点击"预订"跳转到教室预订页，携带该行的 classroom_id 和 slot_id。
   </div>
 </div>
 
-<!-- ======================== PAGE 5: 教室预订页 ======================== -->
+<!-- ====================== PAGE: 教室预订页 ====================== -->
 <div class="page" id="page-reserve">
   <div class="page-title">教室预订系统</div>
   <div class="exit-btn" onclick="showPage('login')">退出登录</div>
   <div class="welcome">欢迎，张三 | 当前角色：师生用户</div>
-  
+
   <div class="wf-nav">
     <div class="wf-nav-item" onclick="showPage('stu-home')">首页</div>
     <div class="wf-nav-item" onclick="showPage('query-room')">查询教室</div>
@@ -437,654 +424,558 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
-  <div class="wf-section-title">教室预订</div>
+  <div class="sec-title">教室预订</div>
 
-  <div class="wf-form mt10">
-    <div class="wf-form-title">预订信息确认 <span class="callout-inline">1</span></div>
-    <div class="wf-row">
-      <span class="wf-label">教室名称：</span>
-      <span style="font-weight:bold;">A101多媒体教室</span>
-      <span class="wf-label ml20">教室编号：</span>
-      <span>CR001</span>
-    </div>
-    <div class="wf-row">
-      <span class="wf-label">教室位置：</span>
-      <span>A栋1楼</span>
-      <span class="wf-label ml20">教室容量：</span>
-      <span>120人</span>
-      <span class="wf-label ml20">设备：</span>
-      <span>投影仪、音响</span>
-    </div>
-    <div class="wf-row">
-      <span class="wf-label">使用日期：</span>
-      <span style="font-weight:bold;">2026-06-10</span>
-      <span class="wf-label ml20">课时范围：</span>
-      <span style="font-weight:bold;">第4节 ~ 第6节</span>
-      <span class="callout-inline" style="margin-left:8px;">2</span>
-    </div>
-    <div style="border-top:1px dashed #999; margin:12px 0;"></div>
-    <div class="wf-row">
-      <span class="wf-label">申请人：</span>
-      <span>张三（zhangsan）</span>
-      <span class="callout-inline" style="margin-left:8px;">3</span>
-    </div>
-    <div class="wf-row">
-      <span class="wf-label">预订用途：</span>
-      <textarea class="wf-textarea" placeholder="请填写预订用途，如：学术报告、班级活动等" style="width:400px;"></textarea>
-      <span class="callout-inline" style="margin-left:8px;">4</span>
-    </div>
-    <div class="wf-row" style="justify-content:center; margin-top:20px; gap:30px;">
-      <button class="wf-btn wf-btn-primary" style="width:140px;">提交预订</button>
-      <span class="callout-inline">5</span>
-      <button class="wf-btn" style="width:140px;" onclick="showPage('query-room')">返回查询</button>
-    </div>
-  </div>
+  <div class="two-col">
+    <div class="col-content">
+      <div class="wf-form">
+        <div class="wf-form-title">预订信息确认（以下信息由系统自动带入，不可修改）</div>
+        <div class="wf-row">
+          <span class="wf-label">教室名称：</span>
+          <span class="wname">教室名称显示</span>
+          <span style="font-weight:bold;">A101多媒体教室</span>
+          <span class="wf-label ml20">教室编号：</span>
+          <span>CR001</span>
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">教室位置：</span><span>A栋1楼</span>
+          <span class="wf-label ml20">容量：</span><span>120人</span>
+          <span class="wf-label ml20">设备：</span><span>投影仪、音响</span>
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">使用日期：</span>
+          <span style="font-weight:bold;">2026-06-10</span>
+          <span class="wf-label ml20">课时范围：</span>
+          <span style="font-weight:bold;">第4节 ~ 第6节</span>
+          <span class="cn">1</span>
+        </div>
+        <div style="border-top:1px dashed #999;margin:12px 0;"></div>
+        <div class="wf-row">
+          <span class="wf-label">申请人：</span>
+          <span class="wname">申请人显示</span>
+          <span>张三（zhangsan）</span>
+          <span class="cn">2</span>
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">预订用途：</span>
+          <span class="wname">用途输入框</span>
+          <textarea class="wf-textarea" placeholder="请填写预订用途，如：学术报告、班级活动等" style="width:380px;"></textarea>
+          <span class="cn">3</span>
+        </div>
+        <div class="wf-row" style="justify-content:center; margin-top:16px; gap:20px;">
+          <span class="wname">提交按钮</span>
+          <button class="wf-btn wf-btn-primary" style="width:130px;">提交预订</button>
+          <span class="cn">4</span>
+          <span class="wname">返回按钮</span>
+          <button class="wf-btn" style="width:130px;" onclick="showPage('query-room')">返回查询</button>
+          <span class="cn">5</span>
+        </div>
+      </div>
 
-  <!-- Success/Fail mock -->
-  <div class="wf-form mt20" style="border-color:#090; background:#f0fff0;">
-    <div style="color:#090; font-weight:bold; font-size:16px;">&#10004; 预订成功！</div>
-    <div style="margin-top:6px;">预订编号：RES20260610001 | 状态：CREATED | 创建时间：2026-06-10 14:30:00</div>
-  </div>
-  <div class="wf-form mt10" style="border-color:#c00; background:#fff0f0;">
-    <div style="color:#c00; font-weight:bold; font-size:16px;">&#10008; 预订失败！</div>
-    <div style="margin-top:6px;">原因：该教室在该课时范围内已被其他用户预订（时段冲突）</div>
-  </div>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:100px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">1</span> 预订信息确认区（只读）</div>
-    教室名称、位置、容量、设备来自 t_classroom 表。<br>
-    日期和课时来自 t_classroom_time_slot 表。<br>
-    <strong>这些信息由上一页（空闲教室查询）点击"预订"时携带过来，用户不可修改。</strong>
-  </div>
-  <div class="anno" style="top:225px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">2</span> 课时显示</div>
-    <strong>精确到"课时"，如"第4节~第6节"，对应 start_section=4, end_section=6。</strong>
-  </div>
-  <div class="anno" style="top:310px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">3</span> 申请人（自动填充）</div>
-    取当前登录用户的 user_name 和 account，对应预订记录中的 ts_id（师生编号）。<br>
-    <strong>不可修改，系统自动关联当前登录用户。</strong>
-  </div>
-  <div class="anno" style="top:400px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">4</span> 预订用途 (purpose)</div>
-    对应 t_reservation.purpose，VARCHAR(200)。<br>
-    <strong>用户可填写"学术报告""班级活动"等用途说明。</strong>
-  </div>
-  <div class="anno" style="top:530px; right:30px; max-width:310px;">
-    <div class="anno-title"><span class="callout-inline">5</span> 提交预订交互</div>
-    点击"提交预订"触发存储过程 sp_reserve_classroom：<br>
-    1. 事务内锁定时间段(SELECT FOR UPDATE)<br>
-    2. 校验 slot_status 是否为 FREE<br>
-    3. 写入 t_reservation (status=CREATED)<br>
-    4. 将时段标记为 RESERVED<br>
-    <strong>成功 → 显示预订编号、状态CREATED<br>
-    冲突 → 提示"时段冲突，预订失败"<br>
-    同一教室同一日期同一课时不可重复预订</strong><br>
-    下方绿色/红色框分别演示成功和失败两种结果。
+      <!-- 成功/失败提示演示 -->
+      <div class="result-ok mt10">
+        <span style="color:#090;font-weight:bold;font-size:16px;">&#10004; 预订成功！</span>
+        <span style="margin-left:10px;">预订编号：RES20260610001 | 状态：已创建 | 时间：2026-06-10 14:30</span>
+        <span class="cn">6</span>
+      </div>
+      <div class="result-fail mt10">
+        <span style="color:#c00;font-weight:bold;font-size:16px;">&#10008; 预订失败！</span>
+        <span style="margin-left:10px;">该教室在该课时范围已被其他用户预订（时段冲突）</span>
+        <span class="cn">7</span>
+      </div>
+    </div>
+    <div class="col-anno">
+      <div class="anno">
+        <span class="cn">1</span> <strong>预订信息确认区</strong>：教室名称、位置、容量、设备、日期、课时范围均<strong>由上一页（空闲教室查询）点击"预订"时自动带入</strong>，用户不可编辑，只能查看确认。
+      </div>
+      <div class="anno">
+        <span class="cn">2</span> <strong>申请人</strong>：系统自动填入当前登录用户的姓名和账号，不可修改。预订记录自动关联当前用户。
+      </div>
+      <div class="anno">
+        <span class="cn">3</span> <strong>用途输入框</strong>：用户填写预订教室的用途，如"学术报告""班级活动""考试复习"等。方便管理员查看预订用途。
+      </div>
+      <div class="anno">
+        <span class="cn">4</span> <strong>点击【提交预订】按钮</strong>：弹出确认对话框"确认提交预订？"。确认后系统检查该时段是否仍然空闲。<strong>若空闲→预订成功，显示预订编号；若已被他人预订→弹出提示"时段冲突，预订失败"。同一教室同一日期同一课时不可重复预订。</strong>
+      </div>
+      <div class="anno">
+        <span class="cn">5</span> <strong>点击【返回查询】按钮</strong>：不提交预订，返回空闲教室查询页面。
+      </div>
+      <div class="anno">
+        <span class="cn">6</span> <strong>预订成功提示</strong>：显示预订编号、状态"已创建"、创建时间。用户可在"我的预订"中查看此记录。
+      </div>
+      <div class="anno">
+        <span class="cn">7</span> <strong>预订失败提示</strong>：显示失败原因（时段冲突）。用户可返回查询页面选择其他教室或时段。
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ======================== PAGE 6: 我的预订页 ======================== -->
+<!-- ====================== PAGE: 我的预订页 ====================== -->
 <div class="page" id="page-my-reserve">
   <div class="page-title">教室预订系统</div>
   <div class="exit-btn" onclick="showPage('login')">退出登录</div>
   <div class="welcome">欢迎，张三 | 当前角色：师生用户</div>
-  
+
   <div class="wf-nav">
     <div class="wf-nav-item" onclick="showPage('stu-home')">首页</div>
     <div class="wf-nav-item" onclick="showPage('query-room')">查询教室</div>
-    <div class="wf-nav-item active" onclick="showPage('my-reserve')">我的预订</div>
+    <div class="wf-nav-item active">我的预订</div>
     <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
-  <div class="wf-section-title">我的预订记录</div>
+  <div class="sec-title">我的预订记录</div>
 
-  <table class="wf-table mt10">
-    <thead>
-      <tr>
-        <th>预订编号</th><th>教室名称</th><th>位置</th><th>使用日期</th>
-        <th>课时范围</th><th>用途</th><th>状态</th><th>申请时间</th><th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>RES001</td><td>A101多媒体教室</td><td>A栋1楼</td><td>2026-06-10</td>
-        <td>第4节~第6节</td><td>学术报告</td>
-        <td style="color:green;font-weight:bold;">CREATED</td>
-        <td>2026-06-08 14:30</td>
-        <td><span class="op-link">取消</span> <span class="callout-inline">1</span></td>
-      </tr>
-      <tr>
-        <td>RES002</td><td>B201阶梯教室</td><td>B栋2楼</td><td>2026-06-05</td>
-        <td>第1节~第3节</td><td>班级活动</td>
-        <td style="color:gray;">FINISHED</td>
-        <td>2026-06-03 09:15</td>
-        <td>-</td>
-      </tr>
-      <tr>
-        <td>RES003</td><td>C305普通教室</td><td>C栋3楼</td><td>2026-06-04</td>
-        <td>第7节~第8节</td><td>考试复习</td>
-        <td style="color:red;">CANCELLED</td>
-        <td>2026-06-02 16:40</td>
-        <td>-</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:100px; right:30px; max-width:300px;">
-    <div class="anno-title">我的预订页说明</div>
-    数据来源：视图 v_reservation_detail，按当前登录用户的 ts_id 过滤。<br>
-    <strong>展示该师生的所有预订记录，包括已创建(CREATED)、已完成(FINISHED)、已取消(CANCELLED)。</strong>
-  </div>
-  <div class="anno" style="top:300px; right:30px; max-width:300px;">
-    <div class="anno-title"><span class="callout-inline">1</span> 取消预订交互</div>
-    只有状态为 CREATED 的预订可以取消。<br>
-    点击"取消"：<br>
-    1. 弹出确认对话框："确定取消该预订？"<br>
-    2. 确认后 reservation_status 改为 CANCELLED<br>
-    3. 对应 slot_status 恢复为 FREE<br>
-    <strong>FINISHED 和 CANCELLED 状态的记录不可操作。</strong>
-  </div>
-  <div class="anno" style="bottom:60px; right:30px; max-width:300px;">
-    <div class="anno-title">状态颜色约定</div>
-    <strong>CREATED（绿色）= 预订有效<br>
-    FINISHED（灰色）= 已使用完毕<br>
-    CANCELLED（红色）= 已取消</strong><br>
-    颜色区分帮助用户快速识别预订状态。
+  <div class="two-col">
+    <div class="col-content">
+      <table class="wf-table mt10">
+        <thead>
+          <tr>
+            <th>预订编号</th><th>教室名称</th><th>位置</th><th>使用日期</th>
+            <th>课时范围</th><th>用途</th><th>状态</th><th>申请时间</th><th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>RES001</td><td>A101多媒体教室</td><td>A栋1楼</td><td>2026-06-10</td>
+            <td>第4~6节</td><td>学术报告</td>
+            <td style="color:green;font-weight:bold;">已创建</td>
+            <td>2026-06-08 14:30</td>
+            <td><span class="op-link">取消</span> <span class="cn">1</span></td>
+          </tr>
+          <tr>
+            <td>RES002</td><td>B201阶梯教室</td><td>B栋2楼</td><td>2026-06-05</td>
+            <td>第1~3节</td><td>班级活动</td>
+            <td style="color:gray;">已完成</td>
+            <td>2026-06-03 09:15</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>RES003</td><td>C305普通教室</td><td>C栋3楼</td><td>2026-06-04</td>
+            <td>第7~8节</td><td>考试复习</td>
+            <td style="color:red;">已取消</td>
+            <td>2026-06-02 16:40</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-anno">
+      <div class="anno">
+        <strong>页面说明：</strong>显示当前登录用户的所有预订记录，<strong>只能看到自己的预订</strong>，看不到其他用户的。列表按申请时间倒序排列。
+      </div>
+      <div class="anno">
+        <span class="cn">1</span> <strong>点击【取消】链接</strong>：弹出确认对话框"确定取消该预订？"。确认后该预订状态变为"已取消"，<strong>对应教室时段恢复为空闲状态</strong>，其他用户可以重新预订该时段。<strong>只有状态为"已创建"的预订可以取消</strong>，"已完成"和"已取消"的预订不显示取消按钮。
+      </div>
+      <div class="anno">
+        <strong>状态说明：</strong><br>
+        · <strong style="color:green;">已创建</strong>（绿色）= 预订有效，尚未使用<br>
+        · <strong style="color:gray;">已完成</strong>（灰色）= 已使用完毕<br>
+        · <strong style="color:red;">已取消</strong>（红色）= 用户主动取消或被管理员取消
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ======================== PAGE 7: 管理员首页 ======================== -->
+<!-- ====================== PAGE: 管理员首页 ====================== -->
 <div class="page" id="page-admin-home">
   <div class="page-title">教室预订系统</div>
   <div class="exit-btn" onclick="showPage('login')">退出登录</div>
   <div class="welcome">欢迎，admin01 | 当前角色：管理员</div>
-  
+
   <div class="wf-nav">
-    <div class="wf-nav-item active" onclick="showPage('admin-home')">控制台</div>
-    <div class="wf-nav-item" onclick="showPage('user-mgmt')">用户管理</div>
-    <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理</div>
-    <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置</div>
-    <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询</div>
+    <div class="wf-nav-item active">控制台</div>
+    <div class="wf-nav-item" onclick="showPage('user-mgmt')">用户管理 <span class="cn">1</span></div>
+    <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理 <span class="cn">2</span></div>
+    <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置 <span class="cn">3</span></div>
+    <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询 <span class="cn">4</span></div>
     <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
-  <div class="wf-section-title">管理员控制台</div>
+  <div class="sec-title">管理员控制台</div>
 
-  <div class="flex gap20 mt20" style="flex-wrap:wrap;">
-    <div class="dash-card" onclick="showPage('user-mgmt')">
-      <div class="card-icon">👤</div>
-      <div class="card-label">用户管理</div>
-      <div style="font-size:12px;color:#666;margin-top:4px;">增加/停用用户</div>
+  <div class="two-col">
+    <div class="col-content">
+      <div class="flex gap20 mt10" style="flex-wrap:wrap;">
+        <div class="dash-card" onclick="showPage('user-mgmt')">
+          <div class="card-icon">👤</div>
+          <div class="card-label">用户管理</div>
+          <div style="font-size:12px;color:#666;margin-top:4px;">增加/停用用户</div>
+        </div>
+        <div class="dash-card" onclick="showPage('room-mgmt')">
+          <div class="card-icon">🏫</div>
+          <div class="card-label">教室管理</div>
+          <div style="font-size:12px;color:#666;margin-top:4px;">增加/停用/删除教室</div>
+        </div>
+        <div class="dash-card" onclick="showPage('timeslot')">
+          <div class="card-icon">🕐</div>
+          <div class="card-label">时间段设置</div>
+          <div style="font-size:12px;color:#666;margin-top:4px;">设置教室可用课时</div>
+        </div>
+        <div class="dash-card" onclick="showPage('admin-query')">
+          <div class="card-icon">📊</div>
+          <div class="card-label">预订情况查询</div>
+          <div style="font-size:12px;color:#666;margin-top:4px;">查看全部预订</div>
+        </div>
+      </div>
     </div>
-    <div class="dash-card" onclick="showPage('room-mgmt')">
-      <div class="card-icon">🏫</div>
-      <div class="card-label">教室管理</div>
-      <div style="font-size:12px;color:#666;margin-top:4px;">增加/停用/删除教室</div>
+    <div class="col-anno">
+      <div class="anno">
+        <span class="cn">1</span> <strong>点击【用户管理】</strong>：跳转到用户管理页面，管理员可以新增师生用户、停用/启用用户。
+      </div>
+      <div class="anno">
+        <span class="cn">2</span> <strong>点击【教室管理】</strong>：跳转到教室管理页面，管理员可以新增教室、停用/启用/删除教室。
+      </div>
+      <div class="anno">
+        <span class="cn">3</span> <strong>点击【时间段设置】</strong>：跳转到可用时间段设置页面，管理员可以为每个教室设置哪些日期的哪些课时是可预订的。
+      </div>
+      <div class="anno">
+        <span class="cn">4</span> <strong>点击【预订查询】</strong>：跳转到预订情况查询页面，管理员可以查看<strong>所有用户的全部预订记录</strong>，按日期、教室、状态筛选。
+      </div>
+      <div class="anno">
+        <strong>页面说明：</strong>管理员登录后进入此页面。<strong>管理员导航栏与师生端完全不同</strong>，包含用户管理、教室管理、时间段设置、预订查询等管理功能，体现角色权限差异。
+      </div>
     </div>
-    <div class="dash-card" onclick="showPage('timeslot')">
-      <div class="card-icon">🕐</div>
-      <div class="card-label">时间段设置</div>
-      <div style="font-size:12px;color:#666;margin-top:4px;">设置教室可用课时</div>
-    </div>
-    <div class="dash-card" onclick="showPage('admin-query')">
-      <div class="card-icon">📊</div>
-      <div class="card-label">预订情况查询</div>
-      <div style="font-size:12px;color:#666;margin-top:4px;">查看全部预订</div>
-    </div>
-  </div>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:100px; right:30px; max-width:300px;">
-    <div class="anno-title">管理员首页说明</div>
-    管理员登录后进入此控制台页面。<br>
-    <strong>管理员导航栏包含：用户管理、教室管理、时间段设置、预订查询、修改密码。<br>
-    与师生端导航完全不同，体现角色权限差异。</strong>
-  </div>
-  <div class="anno" style="top:350px; right:30px; max-width:280px;">
-    <div class="anno-title">功能卡片</div>
-    每个卡片对应管理员的一项核心职责（来自实验1的管理员用例）。<br>
-    <strong>点击卡片跳转到对应功能页面。</strong>
   </div>
 </div>
 
-<!-- ======================== PAGE 8: 用户管理页 ======================== -->
+<!-- ====================== PAGE: 用户管理页 ====================== -->
 <div class="page" id="page-user-mgmt">
   <div class="page-title">教室预订系统</div>
   <div class="exit-btn" onclick="showPage('login')">退出登录</div>
   <div class="welcome">欢迎，admin01 | 当前角色：管理员</div>
-  
+
   <div class="wf-nav">
     <div class="wf-nav-item" onclick="showPage('admin-home')">控制台</div>
-    <div class="wf-nav-item active" onclick="showPage('user-mgmt')">用户管理</div>
+    <div class="wf-nav-item active">用户管理</div>
     <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理</div>
     <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置</div>
     <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询</div>
     <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
-  <div class="wf-section-title">用户管理</div>
+  <div class="sec-title">用户管理</div>
 
-  <div class="wf-row mt10">
-    <span class="wf-label">搜索账号：</span>
-    <input class="wf-input" placeholder="输入账号或姓名" style="width:200px;">
-    <button class="wf-btn" style="margin-left:8px;">搜索</button>
-    <button class="wf-btn wf-btn-primary" style="margin-left:20px;">+ 新增用户</button>
-    <span class="callout-inline" style="margin-left:8px;">1</span>
-  </div>
+  <div class="two-col">
+    <div class="col-content">
+      <div class="wf-row mt10">
+        <span class="wf-label">搜索：</span>
+        <span class="wname">搜索输入框</span>
+        <input class="wf-input" placeholder="输入账号或姓名" style="width:200px;">
+        <span class="wname">搜索按钮</span>
+        <button class="wf-btn" style="margin-left:6px;">搜索</button>
+        <span class="cn">1</span>
+        <span class="wname" style="margin-left:16px;">新增用户按钮</span>
+        <button class="wf-btn wf-btn-primary">+ 新增用户</button>
+        <span class="cn">2</span>
+      </div>
 
-  <table class="wf-table mt10">
-    <thead>
-      <tr>
-        <th>用户编号</th><th>账号</th><th>姓名</th><th>身份</th>
-        <th>联系方式</th><th>状态</th><th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>TS001</td><td>zhangsan</td><td>张三</td><td>TEACHER</td>
-        <td>13800001111</td><td style="color:green;">ACTIVE</td>
-        <td><span class="op-link">停用</span> <span class="callout-inline">2</span></td>
-      </tr>
-      <tr>
-        <td>TS002</td><td>lisi</td><td>李四</td><td>STUDENT</td>
-        <td>13900002222</td><td style="color:green;">ACTIVE</td>
-        <td><span class="op-link">停用</span></td>
-      </tr>
-      <tr>
-        <td>TS003</td><td>wangwu</td><td>王五</td><td>STUDENT</td>
-        <td>13700003333</td><td style="color:red;">DISABLED</td>
-        <td><span class="op-link">启用</span></td>
-      </tr>
-    </tbody>
-  </table>
+      <table class="wf-table mt10">
+        <thead>
+          <tr>
+            <th>用户编号</th><th>账号</th><th>姓名</th><th>身份</th>
+            <th>联系方式</th><th>状态</th><th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>TS001</td><td>zhangsan</td><td>张三</td><td>教师</td>
+            <td>13800001111</td><td style="color:green;">正常</td>
+            <td><span class="op-link">停用</span> <span class="cn">3</span></td>
+          </tr>
+          <tr>
+            <td>TS002</td><td>lisi</td><td>李四</td><td>学生</td>
+            <td>13900002222</td><td style="color:green;">正常</td>
+            <td><span class="op-link">停用</span></td>
+          </tr>
+          <tr>
+            <td>TS003</td><td>wangwu</td><td>王五</td><td>学生</td>
+            <td>13700003333</td><td style="color:red;">已停用</td>
+            <td><span class="op-link">启用</span> <span class="cn">4</span></td>
+          </tr>
+        </tbody>
+      </table>
 
-  <!-- Add user form (inline mock) -->
-  <div class="wf-form mt20" style="border-style:dashed; max-width:600px;">
-    <div class="wf-form-title">新增用户表单 <span class="callout-inline">3</span></div>
-    <div class="wf-row">
-      <span class="wf-label">登录账号：</span>
-      <input class="wf-input" placeholder="全局唯一" style="width:220px;">
+      <!-- 新增用户表单 -->
+      <div class="wf-form mt20" style="border-style:dashed;max-width:550px;">
+        <div class="wf-form-title">新增用户表单 <span class="cn">5</span></div>
+        <div class="wf-row"><span class="wf-label">登录账号：</span><span class="wname">账号输入框</span><input class="wf-input" placeholder="全局唯一" style="width:200px;"> <span class="cn">6</span></div>
+        <div class="wf-row"><span class="wf-label">用户姓名：</span><span class="wname">姓名输入框</span><input class="wf-input" style="width:200px;"></div>
+        <div class="wf-row"><span class="wf-label">初始密码：</span><span class="wname">密码输入框</span><input class="wf-input" style="width:200px;"></div>
+        <div class="wf-row"><span class="wf-label">身份类型：</span><span class="wname">身份下拉框</span><select class="wf-select"><option>教师</option><option>学生</option></select> <span class="cn">7</span></div>
+        <div class="wf-row"><span class="wf-label">联系方式：</span><span class="wname">联系方式输入框</span><input class="wf-input" style="width:200px;"></div>
+        <div class="wf-row" style="justify-content:center;margin-top:10px;">
+          <span class="wname">保存按钮</span><button class="wf-btn wf-btn-primary">保存</button> <span class="cn">8</span>
+          <span class="wname" style="margin-left:10px;">取消按钮</span><button class="wf-btn">取消</button>
+        </div>
+      </div>
     </div>
-    <div class="wf-row">
-      <span class="wf-label">用户姓名：</span>
-      <input class="wf-input" style="width:220px;">
+    <div class="col-anno">
+      <div class="anno"><span class="cn">1</span> <strong>点击【搜索】按钮</strong>：根据输入的账号或姓名模糊搜索用户。不输入则显示全部用户。</div>
+      <div class="anno"><span class="cn">2</span> <strong>点击【+ 新增用户】按钮</strong>：展开下方新增用户表单（虚线框部分），填写用户信息后保存。</div>
+      <div class="anno"><span class="cn">3</span> <strong>点击【停用】链接</strong>：弹出确认对话框。<strong>若该用户存在尚未使用的预订，弹出提示"该用户有N条未完成预订，停用后这些预订将自动取消，是否继续？"</strong>确认后该用户状态变为"已停用"，关联预订自动取消，对应时段恢复空闲。已停用用户无法登录系统。</div>
+      <div class="anno"><span class="cn">4</span> <strong>点击【启用】链接</strong>：将已停用的用户重新启用，状态恢复为"正常"，该用户可以重新登录系统。</div>
+      <div class="anno"><span class="cn">5</span> <strong>新增用户表单</strong>：点击"新增用户"按钮后展开此表单。所有带*号的字段为必填项。</div>
+      <div class="anno"><span class="cn">6</span> <strong>账号输入框</strong>：输入新用户的登录账号，<strong>账号必须全局唯一</strong>。若输入已存在的账号，点击保存后弹出提示"该账号已存在"。</div>
+      <div class="anno"><span class="cn">7</span> <strong>身份下拉框</strong>：选择"教师"或"学生"，决定该用户的身份类型。选择后不可更改（如需更改需停用后重新创建）。</div>
+      <div class="anno"><span class="cn">8</span> <strong>点击【保存】按钮</strong>：校验所有必填项是否填写完整、账号是否唯一。<strong>通过后弹出确认对话框"确认新增该用户？"，确认后用户创建成功</strong>，列表中刷新显示新用户。</div>
     </div>
-    <div class="wf-row">
-      <span class="wf-label">初始密码：</span>
-      <input class="wf-input" style="width:220px;">
-    </div>
-    <div class="wf-row">
-      <span class="wf-label">身份类型：</span>
-      <select class="wf-select"><option>TEACHER</option><option>STUDENT</option></select>
-      <span class="callout-inline" style="margin-left:8px;">4</span>
-    </div>
-    <div class="wf-row">
-      <span class="wf-label">联系方式：</span>
-      <input class="wf-input" style="width:220px;">
-    </div>
-    <div class="wf-row" style="justify-content:center; margin-top:12px;">
-      <button class="wf-btn wf-btn-primary">保存</button>
-      <button class="wf-btn" style="margin-left:10px;">取消</button>
-    </div>
-  </div>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:100px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">1</span> 新增用户按钮</div>
-    点击后展开下方新增用户表单（或弹出对话框）。<br>
-    <strong>管理员可新增师生用户，对应实验1用例"增加用户"。</strong>
-  </div>
-  <div class="anno" style="top:230px; right:30px; max-width:310px;">
-    <div class="anno-title"><span class="callout-inline">2</span> 停用/启用用户交互</div>
-    点击"停用"：<br>
-    1. 系统查询该用户是否存在未完成预订(reservation_status=CREATED)<br>
-    2. <strong>若有未完成预订，弹出提示："该用户存在N条未完成预订，是否继续停用？"</strong><br>
-    3. 确认后：user_status 改为 DISABLED，关联预订标记为 CANCELLED，对应时段恢复 FREE<br>
-    4. 生成 t_user_mgmt_record 管理记录(operation_type=DISABLE)<br>
-    <strong>采用逻辑删除（停用）而非物理删除，保证历史可追溯。</strong>
-  </div>
-  <div class="anno" style="top:470px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">3</span> 新增用户表单</div>
-    字段对应 t_user + t_teacher_student：<br>
-    · account (VARCHAR 50, 唯一)<br>
-    · user_name (VARCHAR 50)<br>
-    · password (VARCHAR 128)<br>
-    · identity_type (TEACHER/STUDENT)<br>
-    · contact_info (VARCHAR 100)<br>
-    <strong>保存时校验 account 唯一性(uk_user_account)，重复则提示"账号已存在"。</strong>
-  </div>
-  <div class="anno" style="bottom:40px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">4</span> 身份类型</div>
-    对应 t_teacher_student.identity_type。<br>
-    <strong>下拉选择 TEACHER（教师）或 STUDENT（学生），新增时同步写入 t_user 和 t_teacher_student 两张表。</strong>
   </div>
 </div>
 
-<!-- ======================== PAGE 9: 教室管理页 ======================== -->
+<!-- ====================== PAGE: 教室管理页 ====================== -->
 <div class="page" id="page-room-mgmt">
   <div class="page-title">教室预订系统</div>
   <div class="exit-btn" onclick="showPage('login')">退出登录</div>
   <div class="welcome">欢迎，admin01 | 当前角色：管理员</div>
-  
+
   <div class="wf-nav">
     <div class="wf-nav-item" onclick="showPage('admin-home')">控制台</div>
     <div class="wf-nav-item" onclick="showPage('user-mgmt')">用户管理</div>
-    <div class="wf-nav-item active" onclick="showPage('room-mgmt')">教室管理</div>
+    <div class="wf-nav-item active">教室管理</div>
     <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置</div>
     <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询</div>
     <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
-  <div class="wf-section-title">教室管理</div>
+  <div class="sec-title">教室管理</div>
 
-  <div class="wf-row mt10">
-    <span class="wf-label">搜索教室：</span>
-    <input class="wf-input" placeholder="教室名称或位置" style="width:200px;">
-    <button class="wf-btn" style="margin-left:8px;">搜索</button>
-    <button class="wf-btn wf-btn-primary" style="margin-left:20px;">+ 新增教室</button>
-    <span class="callout-inline" style="margin-left:8px;">1</span>
-  </div>
+  <div class="two-col">
+    <div class="col-content">
+      <div class="wf-row mt10">
+        <span class="wf-label">搜索：</span>
+        <span class="wname">搜索输入框</span>
+        <input class="wf-input" placeholder="教室名称或位置" style="width:200px;">
+        <span class="wname">搜索按钮</span>
+        <button class="wf-btn" style="margin-left:6px;">搜索</button>
+        <span class="cn">1</span>
+        <span class="wname" style="margin-left:16px;">新增教室按钮</span>
+        <button class="wf-btn wf-btn-primary">+ 新增教室</button>
+        <span class="cn">2</span>
+      </div>
 
-  <table class="wf-table mt10">
-    <thead>
-      <tr>
-        <th>教室编号</th><th>教室名称</th><th>位置</th><th>容量</th>
-        <th>设备信息</th><th>状态</th><th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>CR001</td><td>A101多媒体教室</td><td>A栋1楼</td><td>120</td>
-        <td>投影仪、音响</td><td style="color:green;">AVAILABLE</td>
-        <td><span class="op-link">停用</span> <span class="op-link" onclick="showPage('timeslot')">设置时段</span> <span class="callout-inline">2</span></td>
-      </tr>
-      <tr>
-        <td>CR002</td><td>A202讨论室</td><td>A栋2楼</td><td>30</td>
-        <td>白板</td><td style="color:green;">AVAILABLE</td>
-        <td><span class="op-link">停用</span> <span class="op-link" onclick="showPage('timeslot')">设置时段</span></td>
-      </tr>
-      <tr>
-        <td>CR003</td><td>B201阶梯教室</td><td>B栋2楼</td><td>200</td>
-        <td>投影仪、话筒</td><td style="color:red;">DISABLED</td>
-        <td><span class="op-link">启用</span> <span class="op-link">删除</span></td>
-      </tr>
-    </tbody>
-  </table>
+      <table class="wf-table mt10">
+        <thead>
+          <tr><th>教室编号</th><th>教室名称</th><th>位置</th><th>容量</th><th>设备信息</th><th>状态</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CR001</td><td>A101多媒体教室</td><td>A栋1楼</td><td>120</td>
+            <td>投影仪、音响</td><td style="color:green;">可用</td>
+            <td><span class="op-link">停用</span> <span class="cn">3</span> <span class="op-link" onclick="showPage('timeslot')">设置时段</span> <span class="cn">4</span></td>
+          </tr>
+          <tr>
+            <td>CR002</td><td>A202讨论室</td><td>A栋2楼</td><td>30</td>
+            <td>白板</td><td style="color:green;">可用</td>
+            <td><span class="op-link">停用</span> <span class="op-link" onclick="showPage('timeslot')">设置时段</span></td>
+          </tr>
+          <tr>
+            <td>CR003</td><td>B201阶梯教室</td><td>B栋2楼</td><td>200</td>
+            <td>投影仪、话筒</td><td style="color:red;">已停用</td>
+            <td><span class="op-link">启用</span> <span class="op-link">删除</span> <span class="cn">5</span></td>
+          </tr>
+        </tbody>
+      </table>
 
-  <!-- Add classroom form -->
-  <div class="wf-form mt20" style="border-style:dashed; max-width:600px;">
-    <div class="wf-form-title">新增教室表单 <span class="callout-inline">3</span></div>
-    <div class="wf-row">
-      <span class="wf-label">教室名称：</span>
-      <input class="wf-input" style="width:220px;">
+      <div class="wf-form mt20" style="border-style:dashed;max-width:550px;">
+        <div class="wf-form-title">新增教室表单 <span class="cn">6</span></div>
+        <div class="wf-row"><span class="wf-label">教室名称：</span><span class="wname">名称输入框</span><input class="wf-input" style="width:200px;"></div>
+        <div class="wf-row"><span class="wf-label">位置：</span><span class="wname">位置输入框</span><input class="wf-input" placeholder="如：A栋1楼" style="width:200px;"></div>
+        <div class="wf-row"><span class="wf-label">容量(人)：</span><span class="wname">容量输入框</span><input class="wf-input wf-input-sm" type="number"> <span class="cn">7</span></div>
+        <div class="wf-row"><span class="wf-label">设备信息：</span><span class="wname">设备输入框</span><input class="wf-input" placeholder="投影仪、音响等" style="width:280px;"></div>
+        <div class="wf-row" style="justify-content:center;margin-top:10px;">
+          <span class="wname">保存按钮</span><button class="wf-btn wf-btn-primary">保存</button> <span class="cn">8</span>
+          <span class="wname" style="margin-left:10px;">取消按钮</span><button class="wf-btn">取消</button>
+        </div>
+      </div>
     </div>
-    <div class="wf-row">
-      <span class="wf-label">位置：</span>
-      <input class="wf-input" placeholder="如：A栋1楼" style="width:220px;">
+    <div class="col-anno">
+      <div class="anno"><span class="cn">1</span> <strong>点击【搜索】按钮</strong>：根据教室名称或位置模糊搜索。不输入则显示全部教室。</div>
+      <div class="anno"><span class="cn">2</span> <strong>点击【+ 新增教室】按钮</strong>：展开下方新增教室表单，填写教室信息后保存。新增教室的状态默认为"可用"。</div>
+      <div class="anno"><span class="cn">3</span> <strong>点击【停用】链接</strong>：弹出确认对话框。<strong>若该教室存在未来有效预订，提示"该教室有N条未完成预订，停用后这些预订将自动取消，是否继续？"</strong>确认后教室状态变为"已停用"，师生查询时不再显示该教室。</div>
+      <div class="anno"><span class="cn">4</span> <strong>点击【设置时段】链接</strong>：跳转到可用时间段设置页面，<strong>为该教室设置哪些日期的哪些课时是可预订的</strong>。只有"可用"状态的教室才显示此链接。</div>
+      <div class="anno"><span class="cn">5</span> <strong>点击【删除】链接</strong>：弹出确认对话框"确定删除该教室？此操作不可恢复"。<strong>只有"已停用"状态的教室才可删除</strong>，"可用"状态的教室需先停用后再删除。建议优先使用"停用"保留历史记录。</div>
+      <div class="anno"><span class="cn">6</span> <strong>新增教室表单</strong>：所有字段均为必填。教室编号由系统自动生成，无需手动填写。</div>
+      <div class="anno"><span class="cn">7</span> <strong>容量输入框</strong>：输入整数，表示教室最大容纳人数。师生查询教室时可按"最低容量"筛选。</div>
+      <div class="anno"><span class="cn">8</span> <strong>点击【保存】按钮</strong>：校验所有必填项。<strong>通过后弹出确认对话框"确认新增该教室？"，确认后教室创建成功</strong>，列表刷新显示新教室。</div>
     </div>
-    <div class="wf-row">
-      <span class="wf-label">容量(人)：</span>
-      <input class="wf-input wf-input-sm" type="number" style="width:100px;">
-      <span class="callout-inline" style="margin-left:8px;">4</span>
-    </div>
-    <div class="wf-row">
-      <span class="wf-label">设备信息：</span>
-      <input class="wf-input" placeholder="投影仪、音响等" style="width:300px;">
-    </div>
-    <div class="wf-row" style="justify-content:center; margin-top:12px;">
-      <button class="wf-btn wf-btn-primary">保存</button>
-      <button class="wf-btn" style="margin-left:10px;">取消</button>
-    </div>
-  </div>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:100px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">1</span> 新增教室</div>
-    对应实验1用例"增加教室"。<br>
-    <strong>新增时系统自动生成 classroom_id，classroom_status 默认为 AVAILABLE。</strong>
-  </div>
-  <div class="anno" style="top:230px; right:30px; max-width:310px;">
-    <div class="anno-title"><span class="callout-inline">2</span> 教室操作</div>
-    <strong>停用：</strong>将 classroom_status 改为 DISABLED。<br>
-    停用前检查是否存在未来有效预订(CREATED)，若有则提示确认。<br>
-    <strong>设置时段：</strong>跳转到可用时间段设置页。<br>
-    <strong>删除：</strong>仅 DISABLED 状态可删除。推荐用"停用(逻辑删除)"保证历史可追溯。<br>
-    生成 t_classroom_mgmt_record 管理记录。
-  </div>
-  <div class="anno" style="top:440px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">3</span> 新增教室表单</div>
-    字段对应 t_classroom：<br>
-    · classroom_name (VARCHAR 50)<br>
-    · location (VARCHAR 100)<br>
-    · capacity (INT)<br>
-    · equipment_info (VARCHAR 200)<br>
-    <strong>保存后同步生成 t_classroom_mgmt_record(operation_type=ADD)。</strong>
-  </div>
-  <div class="anno" style="top:620px; right:30px; max-width:280px;">
-    <div class="anno-title"><span class="callout-inline">4</span> 容量字段</div>
-    对应 t_classroom.capacity，整数类型(INT)。<br>
-    <strong>空闲教室查询时可按最低容量筛选。</strong>
   </div>
 </div>
 
-<!-- ======================== PAGE 10: 可用时间段设置页 ======================== -->
+<!-- ====================== PAGE: 可用时间段设置页 ====================== -->
 <div class="page" id="page-timeslot">
   <div class="page-title">教室预订系统</div>
   <div class="exit-btn" onclick="showPage('login')">退出登录</div>
   <div class="welcome">欢迎，admin01 | 当前角色：管理员</div>
-  
+
   <div class="wf-nav">
     <div class="wf-nav-item" onclick="showPage('admin-home')">控制台</div>
     <div class="wf-nav-item" onclick="showPage('user-mgmt')">用户管理</div>
     <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理</div>
-    <div class="wf-nav-item active" onclick="showPage('timeslot')">时间段设置</div>
+    <div class="wf-nav-item active">时间段设置</div>
     <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询</div>
     <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
-  <div class="wf-section-title">教室可用时间段设置</div>
+  <div class="sec-title">教室可用时间段设置</div>
 
-  <div class="wf-form mt10">
-    <div class="wf-form-title">选择教室 <span class="callout-inline">1</span></div>
-    <div class="wf-row">
-      <span class="wf-label">目标教室：</span>
-      <select class="wf-select" style="width:300px;">
-        <option>CR001 - A101多媒体教室 (A栋1楼)</option>
-        <option>CR002 - A202讨论室 (A栋2楼)</option>
-        <option>CR003 - B201阶梯教室 (B栋2楼)</option>
-      </select>
+  <div class="two-col">
+    <div class="col-content">
+      <div class="wf-form">
+        <div class="wf-form-title">选择教室</div>
+        <div class="wf-row">
+          <span class="wf-label">目标教室：</span>
+          <span class="wname">教室下拉框</span>
+          <select class="wf-select" style="width:280px;">
+            <option>CR001 - A101多媒体教室 (A栋1楼)</option>
+            <option>CR002 - A202讨论室 (A栋2楼)</option>
+          </select>
+          <span class="cn">1</span>
+        </div>
+      </div>
+
+      <div class="wf-form mt10">
+        <div class="wf-form-title">添加可用时段</div>
+        <div class="wf-row">
+          <span class="wf-label">日期：</span>
+          <span class="wname">日期选择框</span>
+          <input class="wf-input" type="date" value="2026-06-10" style="width:160px;">
+          <span class="cn">2</span>
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">开始课时：</span>
+          <span class="wname">开始课时下拉框</span>
+          <select class="wf-select"><option>第1节</option><option>第2节</option><option selected>第3节</option><option>第4节</option><option>第5节</option><option>第6节</option><option>第7节</option><option>第8节</option><option>第9节</option><option>第10节</option><option>第11节</option><option>第12节</option></select>
+          <span class="cn">3</span>
+          <span class="wf-label" style="margin-left:10px;">结束课时：</span>
+          <span class="wname">结束课时下拉框</span>
+          <select class="wf-select"><option>第1节</option><option>第2节</option><option>第3节</option><option>第4节</option><option selected>第5节</option><option>第6节</option><option>第7节</option><option>第8节</option><option>第9节</option><option>第10节</option><option>第11节</option><option>第12节</option></select>
+          <span class="cn">4</span>
+        </div>
+        <div class="wf-row">
+          <span class="wname">添加时段按钮</span>
+          <button class="wf-btn wf-btn-primary">添加时段</button>
+          <span class="cn">5</span>
+        </div>
+      </div>
+
+      <div class="sec-title mt10">已设置时段列表（CR001 - A101多媒体教室）</div>
+      <table class="wf-table">
+        <thead><tr><th>时段编号</th><th>日期</th><th>开始课时</th><th>结束课时</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>SLOT001</td><td>2026-06-10</td><td>第1节</td><td>第2节</td>
+            <td style="color:green;">空闲</td>
+            <td><span class="op-link">置为不可用</span> <span class="cn">6</span> <span class="op-link">删除</span> <span class="cn">7</span></td>
+          </tr>
+          <tr>
+            <td>SLOT002</td><td>2026-06-10</td><td>第4节</td><td>第6节</td>
+            <td style="color:orange;font-weight:bold;">已预订</td>
+            <td><span style="color:#999;">不可操作</span> <span class="cn">8</span></td>
+          </tr>
+          <tr>
+            <td>SLOT003</td><td>2026-06-11</td><td>第1节</td><td>第4节</td>
+            <td style="color:green;">空闲</td>
+            <td><span class="op-link">置为不可用</span> <span class="op-link">删除</span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
-
-  <div class="wf-form mt10">
-    <div class="wf-form-title">添加可用时段 <span class="callout-inline">2</span></div>
-    <div class="wf-row">
-      <span class="wf-label">日期：</span>
-      <input class="wf-input" type="date" value="2026-06-10" style="width:180px;">
-      <span class="wf-label">开始课时：</span>
-      <select class="wf-select wf-input-sm">
-        <option>第1节</option><option>第2节</option><option selected>第3节</option>
-        <option>第4节</option><option>第5节</option><option>第6节</option>
-        <option>第7节</option><option>第8节</option><option>第9节</option>
-        <option>第10节</option><option>第11节</option><option>第12节</option>
-      </select>
-      <span class="wf-label">结束课时：</span>
-      <select class="wf-select wf-input-sm">
-        <option>第1节</option><option>第2节</option><option>第3节</option>
-        <option>第4节</option><option selected>第5节</option><option>第6节</option>
-        <option>第7节</option><option>第8节</option><option>第9节</option>
-        <option>第10节</option><option>第11节</option><option>第12节</option>
-      </select>
-      <button class="wf-btn wf-btn-primary" style="margin-left:12px;">添加时段</button>
-      <span class="callout-inline" style="margin-left:8px;">3</span>
+    <div class="col-anno">
+      <div class="anno"><span class="cn">1</span> <strong>教室下拉框</strong>：选择要设置时段的教室。<strong>只有状态为"可用"的教室才会出现在下拉列表中</strong>，已停用的教室不可设置时段。</div>
+      <div class="anno"><span class="cn">2</span> <strong>日期选择框</strong>：选择要开放预订的日期。通常设置未来的日期。</div>
+      <div class="anno"><span class="cn">3</span><span class="cn">4</span> <strong>课时下拉框</strong>：选择开始课时和结束课时（第1节~第12节）。<strong>结束课时必须大于等于开始课时</strong>，否则弹出提示"课时范围不合法"。</div>
+      <div class="anno"><span class="cn">5</span> <strong>点击【添加时段】按钮</strong>：<strong>系统检查新时段是否与该教室同一日期的已有时段存在重叠</strong>。若重叠则弹出提示"与已有时段冲突，无法添加"。若无冲突则添加成功，新时段状态为"空闲"，师生即可在查询中看到并预订。</div>
+      <div class="anno"><span class="cn">6</span> <strong>点击【置为不可用】链接</strong>：将该时段标记为不可用，师生查询时不再显示。只有"空闲"状态的时段可以执行此操作。</div>
+      <div class="anno"><span class="cn">7</span> <strong>点击【删除】链接</strong>：弹出确认对话框"确定删除该时段？"。确认后该时段记录被永久删除。只有"空闲"状态的时段可以删除。</div>
+      <div class="anno"><span class="cn">8</span> <strong>"不可操作"说明</strong>：<strong>状态为"已预订"的时段不可修改或删除</strong>。因为已有用户预订了该时段，修改或删除会影响已有预订的有效性。如需处理，应先通知用户取消预订。</div>
     </div>
-  </div>
-
-  <div class="wf-section-title mt10">已设置时段列表（CR001 - A101多媒体教室）</div>
-  <table class="wf-table">
-    <thead>
-      <tr>
-        <th>时段编号</th><th>日期</th><th>开始课时</th><th>结束课时</th>
-        <th>状态</th><th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>SLOT001</td><td>2026-06-10</td><td>第1节</td><td>第2节</td>
-        <td style="color:green;">FREE</td>
-        <td><span class="op-link">置为不可用</span> <span class="op-link">删除</span></td>
-      </tr>
-      <tr>
-        <td>SLOT002</td><td>2026-06-10</td><td>第4节</td><td>第6节</td>
-        <td style="color:orange;font-weight:bold;">RESERVED</td>
-        <td><span style="color:#999;">不可操作</span> <span class="callout-inline">4</span></td>
-      </tr>
-      <tr>
-        <td>SLOT003</td><td>2026-06-11</td><td>第1节</td><td>第4节</td>
-        <td style="color:green;">FREE</td>
-        <td><span class="op-link">置为不可用</span> <span class="op-link">删除</span></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:100px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">1</span> 选择教室</div>
-    管理员先选择要设置时段的教室(classroom_id)。<br>
-    <strong>只有 classroom_status=AVAILABLE 的教室可设置时段。</strong>
-  </div>
-  <div class="anno" style="top:225px; right:30px; max-width:300px;">
-    <div class="anno-title"><span class="callout-inline">2</span> 添加时段</div>
-    对应 t_classroom_time_slot 表。<br>
-    日期(use_date)、开始课时(start_section)、结束课时(end_section)。<br>
-    <strong>时间精确到"课时"（性能需求），start_section &le; end_section。</strong>
-  </div>
-  <div class="anno" style="top:340px; right:30px; max-width:310px;">
-    <div class="anno-title"><span class="callout-inline">3</span> 添加时段交互</div>
-    点击"添加时段"：<br>
-    1. 校验 start_section &le; end_section<br>
-    2. <strong>检查新时段是否与该教室同一日期已有时段冲突(overlapsWith)</strong><br>
-    3. 无冲突则写入 t_classroom_time_slot，slot_status=FREE<br>
-    4. 冲突则提示"与已有时段重叠，无法添加"<br>
-    5. 生成 t_classroom_mgmt_record(SET_TIMESLOT)
-  </div>
-  <div class="anno" style="top:510px; right:30px; max-width:310px;">
-    <div class="anno-title"><span class="callout-inline">4</span> 已预订时段保护</div>
-    <strong>slot_status=RESERVED 的时段不可修改或删除。</strong><br>
-    只有 FREE 或 UNAVAILABLE 的时段可以操作。<br>
-    这保证了已有预订的数据一致性。
   </div>
 </div>
 
-<!-- ======================== PAGE 11: 预订情况查询页 ======================== -->
+<!-- ====================== PAGE: 预订情况查询页 ====================== -->
 <div class="page" id="page-admin-query">
   <div class="page-title">教室预订系统</div>
   <div class="exit-btn" onclick="showPage('login')">退出登录</div>
   <div class="welcome">欢迎，admin01 | 当前角色：管理员</div>
-  
+
   <div class="wf-nav">
     <div class="wf-nav-item" onclick="showPage('admin-home')">控制台</div>
     <div class="wf-nav-item" onclick="showPage('user-mgmt')">用户管理</div>
     <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理</div>
     <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置</div>
-    <div class="wf-nav-item active" onclick="showPage('admin-query')">预订查询</div>
+    <div class="wf-nav-item active">预订查询</div>
     <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
-  <div class="wf-section-title">教室预订情况查询</div>
+  <div class="sec-title">教室预订情况查询</div>
 
-  <div class="wf-form mt10">
-    <div class="wf-form-title">筛选条件 <span class="callout-inline">1</span></div>
-    <div class="wf-row">
-      <span class="wf-label">起始日期：</span>
-      <input class="wf-input" type="date" value="2026-06-01" style="width:160px;">
-      <span class="wf-label">截止日期：</span>
-      <input class="wf-input" type="date" value="2026-06-30" style="width:160px;">
-      <span class="wf-label">教室：</span>
-      <select class="wf-select" style="width:200px;">
-        <option>全部教室</option>
-        <option>CR001-A101多媒体教室</option>
-        <option>CR002-A202讨论室</option>
-        <option>CR003-B201阶梯教室</option>
-      </select>
+  <div class="two-col">
+    <div class="col-content">
+      <div class="wf-form">
+        <div class="wf-form-title">筛选条件</div>
+        <div class="wf-row">
+          <span class="wf-label">起始日期：</span>
+          <span class="wname">起始日期选择框</span>
+          <input class="wf-input" type="date" value="2026-06-01" style="width:150px;">
+          <span class="cn">1</span>
+          <span class="wf-label" style="margin-left:10px;">截止日期：</span>
+          <span class="wname">截止日期选择框</span>
+          <input class="wf-input" type="date" value="2026-06-30" style="width:150px;">
+          <span class="cn">2</span>
+        </div>
+        <div class="wf-row">
+          <span class="wf-label">教室：</span>
+          <span class="wname">教室下拉框</span>
+          <select class="wf-select" style="width:200px;">
+            <option>全部教室</option><option>CR001-A101多媒体教室</option><option>CR002-A202讨论室</option>
+          </select>
+          <span class="cn">3</span>
+          <span class="wf-label" style="margin-left:10px;">预订状态：</span>
+          <span class="wname">状态下拉框</span>
+          <select class="wf-select">
+            <option>全部</option><option>已创建</option><option>已完成</option><option>已取消</option>
+          </select>
+          <span class="cn">4</span>
+          <span class="wname" style="margin-left:10px;">查询按钮</span>
+          <button class="wf-btn wf-btn-primary">查 询</button>
+          <span class="cn">5</span>
+        </div>
+      </div>
+
+      <div class="sec-title mt10">查询结果</div>
+      <table class="wf-table">
+        <thead>
+          <tr><th>预订编号</th><th>申请人</th><th>身份</th><th>教室</th><th>日期</th><th>课时</th><th>用途</th><th>状态</th><th>申请时间</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>RES001</td><td>张三</td><td>教师</td><td>A101多媒体教室</td><td>2026-06-10</td>
+            <td>第4~6节</td><td>学术报告</td><td style="color:green;">已创建</td><td>2026-06-08 14:30</td>
+          </tr>
+          <tr>
+            <td>RES002</td><td>李四</td><td>学生</td><td>B201阶梯教室</td><td>2026-06-05</td>
+            <td>第1~3节</td><td>班级活动</td><td style="color:gray;">已完成</td><td>2026-06-03 09:15</td>
+          </tr>
+          <tr>
+            <td>RES003</td><td>王五</td><td>学生</td><td>C305普通教室</td><td>2026-06-04</td>
+            <td>第7~8节</td><td>考试复习</td><td style="color:red;">已取消</td><td>2026-06-02 16:40</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:12px;color:#888;">共 3 条记录</div>
     </div>
-    <div class="wf-row">
-      <span class="wf-label">预订状态：</span>
-      <select class="wf-select">
-        <option>全部</option>
-        <option>CREATED</option>
-        <option>FINISHED</option>
-        <option>CANCELLED</option>
-      </select>
-      <span class="callout-inline" style="margin-left:8px;">2</span>
-      <button class="wf-btn wf-btn-primary" style="margin-left:20px;">查 询</button>
-      <span class="callout-inline" style="margin-left:8px;">3</span>
+    <div class="col-anno">
+      <div class="anno"><span class="cn">1</span><span class="cn">2</span> <strong>日期范围选择</strong>：设置查询的起始日期和截止日期，可查看任意时间段内的预订情况。</div>
+      <div class="anno"><span class="cn">3</span> <strong>教室下拉框</strong>：选择"全部教室"查看所有教室的预订，或选择指定教室只查看该教室的预订。</div>
+      <div class="anno"><span class="cn">4</span> <strong>状态下拉框</strong>：可选"全部""已创建""已完成""已取消"。选择后只显示对应状态的预订记录。</div>
+      <div class="anno"><span class="cn">5</span> <strong>点击【查询】按钮</strong>：根据筛选条件搜索预订记录。<strong>管理员可查看所有用户的全部预订记录</strong>，结果包含申请人姓名、身份、教室信息、课时范围、用途、状态和申请时间。</div>
+      <div class="anno">
+        <strong>管理员查询 vs 师生查询的区别：</strong><br>
+        · 管理员：可以查看<strong>所有用户</strong>的全部预订记录<br>
+        · 师生用户：只能在"我的预订"中查看<strong>自己</strong>的记录<br>
+        <strong>这是角色权限差异的体现。</strong>
+      </div>
     </div>
-  </div>
-
-  <div class="wf-section-title mt10">查询结果</div>
-  <table class="wf-table">
-    <thead>
-      <tr>
-        <th>预订编号</th><th>申请人</th><th>账号</th><th>身份</th>
-        <th>教室</th><th>位置</th><th>日期</th><th>课时</th>
-        <th>用途</th><th>状态</th><th>申请时间</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>RES001</td><td>张三</td><td>zhangsan</td><td>TEACHER</td>
-        <td>A101多媒体教室</td><td>A栋1楼</td><td>2026-06-10</td><td>第4~6节</td>
-        <td>学术报告</td><td style="color:green;">CREATED</td><td>2026-06-08 14:30</td>
-      </tr>
-      <tr>
-        <td>RES002</td><td>李四</td><td>lisi</td><td>STUDENT</td>
-        <td>B201阶梯教室</td><td>B栋2楼</td><td>2026-06-05</td><td>第1~3节</td>
-        <td>班级活动</td><td style="color:gray;">FINISHED</td><td>2026-06-03 09:15</td>
-      </tr>
-      <tr>
-        <td>RES003</td><td>王五</td><td>wangwu</td><td>STUDENT</td>
-        <td>C305普通教室</td><td>C栋3楼</td><td>2026-06-04</td><td>第7~8节</td>
-        <td>考试复习</td><td style="color:red;">CANCELLED</td><td>2026-06-02 16:40</td>
-      </tr>
-      <tr>
-        <td>RES004</td><td>赵六</td><td>zhaoliu</td><td>TEACHER</td>
-        <td>A202讨论室</td><td>A栋2楼</td><td>2026-06-12</td><td>第3~4节</td>
-        <td>课题讨论</td><td style="color:green;">CREATED</td><td>2026-06-09 10:20</td>
-      </tr>
-    </tbody>
-  </table>
-  <div style="font-size:12px;color:#888;margin-top:4px;">共 4 条记录</div>
-
-  <!-- Annotations -->
-  <div class="anno" style="top:100px; right:30px; max-width:310px;">
-    <div class="anno-title"><span class="callout-inline">1</span> 筛选条件</div>
-    管理员可按"任意时间段"查询预订情况（对应实验1用例"浏览教室预订情况"）。<br>
-    <strong>筛选维度：日期范围、教室、预订状态。</strong>
-  </div>
-  <div class="anno" style="top:230px; right:30px; max-width:290px;">
-    <div class="anno-title"><span class="callout-inline">2</span> 预订状态筛选</div>
-    对应 t_reservation.reservation_status：<br>
-    <strong>CREATED = 已创建（有效）<br>
-    FINISHED = 已完成<br>
-    CANCELLED = 已取消</strong><br>
-    "全部"不做状态过滤。
-  </div>
-  <div class="anno" style="top:340px; right:30px; max-width:310px;">
-    <div class="anno-title"><span class="callout-inline">3</span> 查询按钮交互</div>
-    点击"查询"：<br>
-    从视图 v_reservation_detail 按条件筛选。<br>
-    <strong>结果展示：预订编号、申请人姓名(user_name)、账号(account)、身份(identity_type)、教室名称、位置、使用日期、课时范围、用途、状态、创建时间。</strong><br>
-    管理员可查看所有用户的预订，不限于自己。
-  </div>
-  <div class="anno" style="bottom:40px; right:30px; max-width:280px;">
-    <div class="anno-title">管理员查询 vs 师生查询</div>
-    <strong>管理员可查看全部预订（所有用户）。<br>
-    师生只能在"我的预订"中查看自己的记录。</strong><br>
-    这是权限差异的体现。
   </div>
 </div>
 
@@ -1094,16 +985,12 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
 <script>
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('#sidebar .tree-item, #sidebar .tree-sub').forEach(i => i.classList.remove('active'));
-  
+  document.querySelectorAll('#sidebar .tree-item').forEach(i => i.classList.remove('active'));
   const pageEl = document.getElementById('page-' + id);
   if (pageEl) pageEl.classList.add('active');
-  
-  // highlight sidebar
   const map = {
-    'login': 0, 'changepwd': 1,
-    'stu-home': 2, 'query-room': 3, 'reserve': 4, 'my-reserve': 5,
-    'admin-home': 6, 'user-mgmt': 7, 'room-mgmt': 8, 'timeslot': 9, 'admin-query': 10
+    'login':0,'changepwd':1,'stu-home':2,'query-room':3,'reserve':4,'my-reserve':5,
+    'admin-home':6,'user-mgmt':7,'room-mgmt':8,'timeslot':9,'admin-query':10
   };
   const items = document.querySelectorAll('#sidebar .tree-item');
   const idx = map[id];
