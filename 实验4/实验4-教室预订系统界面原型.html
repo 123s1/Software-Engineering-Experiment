@@ -165,16 +165,26 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     </div>
     <div class="col-anno">
       <div class="anno">
-        <span class="cn">1</span> <strong>账号输入框</strong>：用户输入由管理员分配的唯一登录账号，账号不能为空。若输入的账号不存在，点击登录后弹出提示"该账号不存在"。
+        <span class="cn">1</span> <strong>账号输入框</strong>（对应 t_user.account）<br>
+        · <strong>必填</strong>，不能为空，不能含空格。<br>
+        · 长度 <strong>4~20 位</strong>，只允许字母、数字、下划线。<br>
+        · 由管理员分配，全局唯一，用户不可自行注册。<br>
+        · 出错提示：为空→"请输入账号"；账号不存在→"该账号不存在"。
       </div>
       <div class="anno">
-        <span class="cn">2</span> <strong>密码输入框</strong>：掩码显示（*号），输入内容不可见。密码不能为空，输入错误点击登录后弹出提示"密码错误"。
+        <span class="cn">2</span> <strong>密码输入框</strong>（对应 t_user.password）<br>
+        · <strong>必填</strong>，掩码显示（*号），输入内容不可见，不能含空格。<br>
+        · 长度 <strong>6~20 位</strong>。<br>
+        · 出错提示：为空→"请输入密码"；与账号不匹配→"密码错误"。
       </div>
       <div class="anno">
-        <span class="cn">3</span> <strong>点击【登录】按钮</strong>：首先校验账号和密码是否为空，为空则弹出提示"请输入账号/密码"。验证通过后，<strong>系统根据用户角色自动跳转：管理员→管理员首页，师生→师生首页。</strong>若账号已被停用(DISABLED)，弹出提示"该账号已被停用，请联系管理员"。
+        <span class="cn">3</span> <strong>点击【登录】按钮</strong><br>
+        · 校验顺序：① 账号/密码非空 → ② 账号是否存在 → ③ 密码是否匹配 → ④ 账号状态是否为正常(ACTIVE)。<br>
+        · 全部通过后，<strong>按角色自动跳转：管理员→管理员首页，师生→师生首页</strong>。<br>
+        · 出错提示：账号被停用(DISABLED)→"该账号已被停用，请联系管理员"；连续错误可做登录失败次数限制（建议5次后锁定）。
       </div>
       <div class="anno">
-        <span class="cn">4</span> <strong>点击【重置】按钮</strong>：清空账号和密码输入框的内容，恢复到初始状态。
+        <span class="cn">4</span> <strong>点击【重置】按钮</strong>：一键清空账号、密码两个输入框，恢复初始空白状态；不提交、不校验、不跳转。
       </div>
     </div>
   </div>
@@ -230,19 +240,31 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     </div>
     <div class="col-anno">
       <div class="anno">
-        <span class="cn">1</span> <strong>旧密码输入框</strong>：用户必须先输入当前使用的旧密码进行身份验证。输入错误点击保存后弹出提示"旧密码不正确"。
+        <span class="cn">1</span> <strong>旧密码输入框</strong><br>
+        · <strong>必填</strong>，掩码显示，不能为空。<br>
+        · 用于身份验证，必须等于用户当前密码。<br>
+        · 出错提示：为空→"请输入旧密码"；不正确→"旧密码不正确"。
       </div>
       <div class="anno">
-        <span class="cn">2</span> <strong>新密码输入框</strong>：输入新的登录密码。新密码不能与旧密码相同，否则弹出提示"新密码不能与旧密码相同"。
+        <span class="cn">2</span> <strong>新密码输入框</strong>（对应 t_user.password）<br>
+        · <strong>必填</strong>，掩码显示，不能含空格。<br>
+        · 长度 <strong>6~20 位</strong>，只允许字母、数字、常用符号。<br>
+        · <strong>不能与旧密码相同</strong>。<br>
+        · 出错提示：为空→"请输入新密码"；长度不足→"密码长度不能少于6位"；与旧密码相同→"新密码不能与旧密码相同"。
       </div>
       <div class="anno">
-        <span class="cn">3</span> <strong>确认密码输入框</strong>：再次输入新密码进行确认。两次输入必须一致，不一致则弹出提示"两次输入的密码不一致"。
+        <span class="cn">3</span> <strong>确认密码输入框</strong><br>
+        · <strong>必填</strong>，掩码显示。<br>
+        · 必须与"新密码"<strong>完全一致</strong>（区分大小写）。<br>
+        · 出错提示：不一致→"两次输入的密码不一致"。
       </div>
       <div class="anno">
-        <span class="cn">4</span> <strong>点击【保存修改】按钮</strong>：依次校验：旧密码是否正确→新密码格式是否合规→两次输入是否一致。<strong>全部通过后弹出确认对话框"确定修改密码？"，确认后密码立即生效</strong>，下次登录使用新密码。
+        <span class="cn">4</span> <strong>点击【保存修改】按钮</strong><br>
+        · 校验顺序：① 三项是否非空 → ② 旧密码是否正确 → ③ 新密码长度/格式是否合规 → ④ 新密码≠旧密码 → ⑤ 两次输入是否一致。<br>
+        · <strong>全部通过后弹出确认框"确定修改密码？"，确认后密码立即生效</strong>，本次会话可要求重新登录，下次登录使用新密码。
       </div>
       <div class="anno">
-        <span class="cn">5</span> <strong>点击【退出登录】按钮</strong>：弹出确认对话框"确定退出登录？"，确认后清除登录状态，返回登录页。
+        <span class="cn">5</span> <strong>点击【退出登录】按钮</strong>：弹出确认框"确定退出登录？"，确认后清除登录状态(session)，返回登录页；取消则留在当前页。
       </div>
       <div class="anno">
         <strong>共用说明：</strong>本"修改密码"表单为<strong>师生和管理员共用同一套界面</strong>（用例参与者为"已登录用户"）。在 Axure 里建议做成<strong>母版（Master）</strong>，两个角色页面复用，仅顶部导航栏不同。本页为师生导航版本，管理员版本见"修改密码页（管理员）"。
@@ -303,16 +325,28 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     </div>
     <div class="col-anno">
       <div class="anno">
-        <span class="cn">1</span> <strong>旧密码输入框</strong>：管理员必须先输入当前使用的旧密码进行身份验证。输入错误点击保存后弹出提示"旧密码不正确"。
+        <span class="cn">1</span> <strong>旧密码输入框</strong><br>
+        · <strong>必填</strong>，掩码显示，不能为空。<br>
+        · 用于身份验证，必须等于管理员当前密码。<br>
+        · 出错提示：为空→"请输入旧密码"；不正确→"旧密码不正确"。
       </div>
       <div class="anno">
-        <span class="cn">2</span> <strong>新密码输入框</strong>：输入新的登录密码。新密码不能与旧密码相同，否则弹出提示"新密码不能与旧密码相同"。
+        <span class="cn">2</span> <strong>新密码输入框</strong>（对应 t_user.password）<br>
+        · <strong>必填</strong>，掩码显示，不能含空格。<br>
+        · 长度 <strong>6~20 位</strong>，只允许字母、数字、常用符号。<br>
+        · <strong>不能与旧密码相同</strong>。<br>
+        · 出错提示：为空→"请输入新密码"；长度不足→"密码长度不能少于6位"；与旧密码相同→"新密码不能与旧密码相同"。
       </div>
       <div class="anno">
-        <span class="cn">3</span> <strong>确认密码输入框</strong>：再次输入新密码进行确认。两次输入必须一致，不一致则弹出提示"两次输入的密码不一致"。
+        <span class="cn">3</span> <strong>确认密码输入框</strong><br>
+        · <strong>必填</strong>，掩码显示。<br>
+        · 必须与"新密码"<strong>完全一致</strong>（区分大小写）。<br>
+        · 出错提示：不一致→"两次输入的密码不一致"。
       </div>
       <div class="anno">
-        <span class="cn">4</span> <strong>点击【保存修改】按钮</strong>：依次校验：旧密码是否正确→新密码格式是否合规→两次输入是否一致。<strong>全部通过后弹出确认对话框"确定修改密码？"，确认后密码立即生效</strong>，下次登录使用新密码。
+        <span class="cn">4</span> <strong>点击【保存修改】按钮</strong><br>
+        · 校验顺序：① 三项是否非空 → ② 旧密码是否正确 → ③ 新密码长度/格式是否合规 → ④ 新密码≠旧密码 → ⑤ 两次输入是否一致。<br>
+        · <strong>全部通过后弹出确认框"确定修改密码？"，确认后密码立即生效</strong>，下次登录使用新密码。
       </div>
       <div class="anno">
         <strong>与师生版的区别：</strong>表单和逻辑<strong>完全相同</strong>，仅顶部导航栏为管理员导航。建议在 Axure 中与师生版复用同一个<strong>母版（Master）</strong>，避免重复设计。
@@ -461,25 +495,44 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     </div>
     <div class="col-anno">
       <div class="anno">
-        <span class="cn">1</span> <strong>日期选择框</strong>：选择要查询的日期，必填项。只能选择今天或未来的日期，不能选择过去的日期。
+        <span class="cn">1</span> <strong>日期选择框</strong>（对应查询条件 date）<br>
+        · <strong>必填</strong>，日历控件选择。<br>
+        · <strong>不能早于今天</strong>（过去日期置灰不可选）；可限制最多预订未来 30 天内。<br>
+        · 出错提示：未选→"请选择查询日期"。
       </div>
       <div class="anno">
-        <span class="cn">2</span> <strong>开始课时下拉框</strong>：选择使用教室的起始课时（第1节~第12节），必填项。
+        <span class="cn">2</span> <strong>开始课时下拉框</strong>（对应 start_section）<br>
+        · <strong>必填</strong>，下拉单选。<br>
+        · 取值 <strong>第1节~第12节</strong>（共12个固定选项，整数）。<br>
+        · 出错提示：未选→"请选择开始课时"。
       </div>
       <div class="anno">
-        <span class="cn">3</span> <strong>结束课时下拉框</strong>：选择使用教室的结束课时，必填项。<strong>结束课时必须大于等于开始课时</strong>，否则点击查询后弹出提示"课时范围不合法"。
+        <span class="cn">3</span> <strong>结束课时下拉框</strong>（对应 end_section）<br>
+        · <strong>必填</strong>，取值 第1节~第12节。<br>
+        · <strong>结束课时 ≥ 开始课时</strong>（不能小于开始课时）。<br>
+        · 出错提示：结束&lt;开始→"结束课时不能小于开始课时"。
       </div>
       <div class="anno">
-        <span class="cn">4</span> <strong>位置输入框</strong>：可选填，输入教室所在位置（如"A栋3楼"）进行筛选。不填则不按位置过滤。
+        <span class="cn">4</span> <strong>位置输入框</strong>（筛选条件，可选）<br>
+        · <strong>选填</strong>，文本，长度 ≤ 30 字符，支持模糊匹配（如"A栋"匹配"A栋1~5楼"）。<br>
+        · 留空 = 不按位置过滤。
       </div>
       <div class="anno">
-        <span class="cn">5</span> <strong>容量输入框</strong>：可选填，输入最低容纳人数。不填则不按容量过滤。
+        <span class="cn">5</span> <strong>最低容量输入框</strong>（筛选条件，可选）<br>
+        · <strong>选填</strong>，<strong>只能填正整数</strong>（≥1），最大 500。<br>
+        · 含义：筛选容量 ≥ 该值的教室。<br>
+        · 出错提示：填了非数字/负数→"请输入正整数"。留空 = 不按容量过滤。
       </div>
       <div class="anno">
-        <span class="cn">6</span> <strong>点击【查询】按钮</strong>：根据填写的条件搜索<strong>当前可用且时段空闲</strong>的教室。空闲条件 = 教室状态为"可用" 且 该时段状态为"空闲"，<strong>两个条件缺一不可</strong>。若无符合条件的教室，显示"当前条件下无空闲教室"，不报错。
+        <span class="cn">6</span> <strong>点击【查询】按钮</strong><br>
+        · 先校验：日期非空 → 开始/结束课时非空 → 结束≥开始 → 容量为正整数(若填)。<br>
+        · 通过后查询<strong>当前可用且时段空闲</strong>的教室：<strong>空闲 = 教室状态=可用(AVAILABLE) 且 该时段状态=空闲(FREE)，两条件缺一不可</strong>。<br>
+        · 结果分页展示(建议每页10条)。无结果→"当前条件下无空闲教室"(空列表，不报错)。
       </div>
       <div class="anno">
-        <span class="cn">7</span> <strong>点击【预订】链接</strong>：跳转到教室预订页面，系统自动将该行的教室信息和时段信息带入预订页面，用户无需重复填写。
+        <span class="cn">7</span> <strong>点击【预订】链接</strong>（每行一个）<br>
+        · 跳转到教室预订页，<strong>自动带入该行的教室信息+所选日期+课时范围</strong>，用户无需重复填写。<br>
+        · 边界：点击瞬间该时段若已被他人抢订，进入预订页提交时会再次校验并提示冲突。
       </div>
     </div>
   </div>
@@ -560,22 +613,33 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     </div>
     <div class="col-anno">
       <div class="anno">
-        <span class="cn">1</span> <strong>预订信息确认区</strong>：教室名称、位置、容量、设备、日期、课时范围均<strong>由上一页（空闲教室查询）点击"预订"时自动带入</strong>，用户不可编辑，只能查看确认。
+        <span class="cn">1</span> <strong>预订信息确认区</strong>（只读）<br>
+        · 教室名称、编号、位置、容量、设备、使用日期、课时范围，全部<strong>由上一页自动带入</strong>。<br>
+        · <strong>全部只读，不可编辑</strong>（灰色展示），保证预订对象与查询结果一致。
       </div>
       <div class="anno">
-        <span class="cn">2</span> <strong>申请人</strong>：系统自动填入当前登录用户的姓名和账号，不可修改。预订记录自动关联当前用户。
+        <span class="cn">2</span> <strong>申请人</strong>（对应 t_reservation.user_id）<br>
+        · 系统<strong>自动填入当前登录用户</strong>的姓名+账号，只读不可改。<br>
+        · 预订记录自动关联该用户，作为"我的预订"和管理员查询的依据。
       </div>
       <div class="anno">
-        <span class="cn">3</span> <strong>用途输入框</strong>：用户填写预订教室的用途，如"学术报告""班级活动""考试复习"等。方便管理员查看预订用途。
+        <span class="cn">3</span> <strong>用途输入框</strong>（对应 t_reservation.purpose）<br>
+        · <strong>选填</strong>（建议必填，便于管理）。<br>
+        · 文本，<strong>长度 ≤ 200 字</strong>，如"学术报告""班级活动""考试复习"。<br>
+        · 超长时提示"用途不能超过200字"。
       </div>
       <div class="anno">
-        <span class="cn">4</span> <strong>点击【提交预订】按钮</strong>：弹出确认对话框"确认提交预订？"。确认后系统检查该时段是否仍然空闲。<strong>若空闲→预订成功，显示预订编号；若已被他人预订→弹出提示"时段冲突，预订失败"。同一教室同一日期同一课时不可重复预订。</strong>
+        <span class="cn">4</span> <strong>点击【提交预订】按钮</strong><br>
+        · 弹出确认框"确认提交预订？"。确认后<strong>系统再次校验该时段是否仍空闲</strong>(防并发抢订)。<br>
+        · 成功条件：教室仍可用 且 时段仍空闲 且 当前用户未对同教室同日期同课时重复预订。<br>
+        · 结果：成功→生成预订记录(状态=已创建)，时段状态置为"已预订"，显示预订编号；<br>
+        · 失败提示：时段被占→"时段冲突，预订失败"；重复预订→"您已预订该时段，请勿重复提交"。
       </div>
       <div class="anno">
-        <span class="cn">5</span> <strong>点击【返回查询】按钮</strong>：不提交预订，返回空闲教室查询页面。
+        <span class="cn">5</span> <strong>点击【返回查询】按钮</strong>：不提交、不保存，直接返回空闲教室查询页;已填的用途不保留。
       </div>
       <div class="anno">
-        <span class="cn">6</span> <strong>预订成功提示</strong>：显示预订编号、状态"已创建"、创建时间。用户可在"我的预订"中查看此记录。
+        <span class="cn">6</span> <strong>预订成功提示</strong>：绿色提示条，显示<strong>预订编号 + 状态"已创建" + 创建时间</strong>。用户可在"我的预订"查看/取消该记录。
       </div>
       <div class="anno">
         <span class="cn">7</span> <strong>预订失败提示</strong>：显示失败原因（时段冲突）。用户可返回查询页面选择其他教室或时段。
@@ -635,16 +699,21 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     </div>
     <div class="col-anno">
       <div class="anno">
-        <strong>页面说明：</strong>显示当前登录用户的所有预订记录，<strong>只能看到自己的预订</strong>，看不到其他用户的。列表按申请时间倒序排列。
+        <strong>页面说明：</strong>显示当前登录用户的所有预订记录，<strong>只能看到自己的预订</strong>（按 user_id 过滤），看不到其他用户的。<br>
+        · 默认按申请时间<strong>倒序</strong>排列；记录多时分页(建议每页10条)。<br>
+        · 无任何预订时显示"暂无预订记录"。
       </div>
       <div class="anno">
-        <span class="cn">1</span> <strong>点击【取消】链接</strong>：弹出确认对话框"确定取消该预订？"。确认后该预订状态变为"已取消"，<strong>对应教室时段恢复为空闲状态</strong>，其他用户可以重新预订该时段。<strong>只有状态为"已创建"的预订可以取消</strong>，"已完成"和"已取消"的预订不显示取消按钮。
+        <span class="cn">1</span> <strong>点击【取消】链接</strong>（对应 t_reservation.reservation_status）<br>
+        · <strong>仅状态="已创建"且使用日期未到的预订显示此按钮</strong>；"已完成""已取消"不显示。<br>
+        · 点击弹确认框"确定取消该预订？"。确认后：该预订状态→"已取消"，<strong>对应教室时段恢复为空闲(FREE)</strong>，其他用户可重新预订。<br>
+        · 边界：若取消时已过使用时间，提示"该预订已开始/结束，无法取消"。
       </div>
       <div class="anno">
-        <strong>状态说明：</strong><br>
-        · <strong style="color:green;">已创建</strong>（绿色）= 预订有效，尚未使用<br>
-        · <strong style="color:gray;">已完成</strong>（灰色）= 已使用完毕<br>
-        · <strong style="color:red;">已取消</strong>（红色）= 用户主动取消或被管理员取消
+        <strong>状态说明（reservation_status）：</strong><br>
+        · <strong style="color:green;">已创建</strong>（绿色）= 预订有效、尚未使用，可取消<br>
+        · <strong style="color:gray;">已完成</strong>（灰色）= 使用时间已过，自动转为完成，不可取消<br>
+        · <strong style="color:red;">已取消</strong>（红色）= 用户主动取消，或因停用用户/停用教室被系统取消
       </div>
     </div>
   </div>
@@ -784,14 +853,36 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
       </div>
     </div>
     <div class="col-anno">
-      <div class="anno"><span class="cn">1</span> <strong>点击【搜索】按钮</strong>：根据输入的账号或姓名模糊搜索用户。不输入则显示全部用户。</div>
-      <div class="anno"><span class="cn">2</span> <strong>点击【+ 新增用户】按钮</strong>：展开下方新增用户表单（虚线框部分），填写用户信息后保存。</div>
-      <div class="anno"><span class="cn">3</span> <strong>点击【停用】链接</strong>：弹出确认对话框。<strong>若该用户存在尚未使用的预订，弹出提示"该用户有N条未完成预订，停用后这些预订将自动取消，是否继续？"</strong>确认后该用户状态变为"已停用"，关联预订自动取消，对应时段恢复空闲。已停用用户无法登录系统。</div>
-      <div class="anno"><span class="cn">4</span> <strong>点击【启用】链接</strong>：将已停用的用户重新启用，状态恢复为"正常"，该用户可以重新登录系统。</div>
-      <div class="anno"><span class="cn">5</span> <strong>新增用户表单</strong>：点击"新增用户"按钮后展开此表单。所有带*号的字段为必填项。</div>
-      <div class="anno"><span class="cn">6</span> <strong>账号输入框</strong>：输入新用户的登录账号，<strong>账号必须全局唯一</strong>。若输入已存在的账号，点击保存后弹出提示"该账号已存在"。</div>
-      <div class="anno"><span class="cn">7</span> <strong>身份下拉框</strong>：选择"教师"或"学生"，决定该用户的身份类型。选择后不可更改（如需更改需停用后重新创建）。</div>
-      <div class="anno"><span class="cn">8</span> <strong>点击【保存】按钮</strong>：校验所有必填项是否填写完整、账号是否唯一。<strong>通过后弹出确认对话框"确认新增该用户？"，确认后用户创建成功</strong>，列表中刷新显示新用户。</div>
+      <div class="anno"><span class="cn">1</span> <strong>搜索输入框 + 搜索按钮</strong><br>
+        · 输入框选填，长度 ≤ 20 字符；按<strong>账号或姓名模糊匹配</strong>。<br>
+        · 留空点搜索 = 显示全部用户。结果分页展示。
+      </div>
+      <div class="anno"><span class="cn">2</span> <strong>点击【+ 新增用户】按钮</strong>：展开下方新增用户表单(虚线框)；再次点击或点"取消"可收起。</div>
+      <div class="anno"><span class="cn">3</span> <strong>点击【停用】链接</strong>（对应 user_status：ACTIVE→DISABLED）<br>
+        · 仅"正常"状态用户显示。点击弹确认框。<br>
+        · <strong>若该用户有未使用预订→提示"该用户有N条未完成预订，停用后将自动取消，是否继续？"</strong><br>
+        · 确认后：状态→"已停用"，关联未完成预订自动取消、时段恢复空闲，<strong>该用户无法再登录</strong>。<br>
+        · 采用<strong>逻辑删除(停用)而非物理删除</strong>，保留历史可追溯。
+      </div>
+      <div class="anno"><span class="cn">4</span> <strong>点击【启用】链接</strong>（DISABLED→ACTIVE）：仅"已停用"用户显示；点击后状态恢复"正常"，该用户可重新登录。已被取消的历史预订不会自动恢复。</div>
+      <div class="anno"><span class="cn">5</span> <strong>新增用户表单——字段规则</strong>（带*为必填）<br>
+        · <strong>用户姓名*</strong>(user_name)：必填，2~20 字符。<br>
+        · <strong>初始密码*</strong>(password)：必填，<strong>6~20 位</strong>，不含空格；用户首次登录后可自行修改。<br>
+        · <strong>联系方式*</strong>(contact_info)：必填，<strong>手机号11位数字、以1开头</strong>；格式错→"请输入正确的手机号"。
+      </div>
+      <div class="anno"><span class="cn">6</span> <strong>登录账号输入框</strong>（对应 account）<br>
+        · <strong>必填</strong>，4~20 位，只允许字母/数字/下划线，不含空格。<br>
+        · <strong>全局唯一</strong>；重复→点保存提示"该账号已存在"。<br>
+        · 创建后作为登录凭证，<strong>一般不允许修改</strong>。
+      </div>
+      <div class="anno"><span class="cn">7</span> <strong>身份下拉框</strong>（对应 identity_type）<br>
+        · <strong>必选</strong>，单选"教师/学生"。<br>
+        · <strong>创建后不可更改</strong>(如需改：停用后重建)。
+      </div>
+      <div class="anno"><span class="cn">8</span> <strong>点击【保存】按钮</strong><br>
+        · 校验顺序：① 必填项是否完整 → ② 各字段格式(账号/密码/手机号) → ③ 账号是否唯一。<br>
+        · 全部通过弹确认框"确认新增该用户？"，<strong>确认后创建成功(状态默认正常)</strong>，列表刷新显示新用户；任一校验失败则定位到对应字段并提示。
+      </div>
     </div>
   </div>
 </div>
@@ -863,14 +954,30 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
       </div>
     </div>
     <div class="col-anno">
-      <div class="anno"><span class="cn">1</span> <strong>点击【搜索】按钮</strong>：根据教室名称或位置模糊搜索。不输入则显示全部教室。</div>
-      <div class="anno"><span class="cn">2</span> <strong>点击【+ 新增教室】按钮</strong>：展开下方新增教室表单，填写教室信息后保存。新增教室的状态默认为"可用"。</div>
-      <div class="anno"><span class="cn">3</span> <strong>点击【停用】链接</strong>：弹出确认对话框。<strong>若该教室存在未来有效预订，提示"该教室有N条未完成预订，停用后这些预订将自动取消，是否继续？"</strong>确认后教室状态变为"已停用"，师生查询时不再显示该教室。</div>
-      <div class="anno"><span class="cn">4</span> <strong>点击【设置时段】链接</strong>：跳转到可用时间段设置页面，<strong>为该教室设置哪些日期的哪些课时是可预订的</strong>。只有"可用"状态的教室才显示此链接。</div>
-      <div class="anno"><span class="cn">5</span> <strong>点击【删除】链接</strong>：弹出确认对话框"确定删除该教室？此操作不可恢复"。<strong>只有"已停用"状态的教室才可删除</strong>，"可用"状态的教室需先停用后再删除。建议优先使用"停用"保留历史记录。</div>
-      <div class="anno"><span class="cn">6</span> <strong>新增教室表单</strong>：所有字段均为必填。教室编号由系统自动生成，无需手动填写。</div>
-      <div class="anno"><span class="cn">7</span> <strong>容量输入框</strong>：输入整数，表示教室最大容纳人数。师生查询教室时可按"最低容量"筛选。</div>
-      <div class="anno"><span class="cn">8</span> <strong>点击【保存】按钮</strong>：校验所有必填项。<strong>通过后弹出确认对话框"确认新增该教室？"，确认后教室创建成功</strong>，列表刷新显示新教室。</div>
+      <div class="anno"><span class="cn">1</span> <strong>搜索输入框 + 搜索按钮</strong>：选填，长度 ≤ 30 字符；按<strong>教室名称或位置模糊匹配</strong>；留空 = 显示全部教室。结果分页。</div>
+      <div class="anno"><span class="cn">2</span> <strong>点击【+ 新增教室】按钮</strong>：展开下方新增教室表单(虚线框)；新增教室<strong>状态默认"可用"</strong>；点"取消"收起。</div>
+      <div class="anno"><span class="cn">3</span> <strong>点击【停用】链接</strong>（对应 classroom_status：AVAILABLE→DISABLED）<br>
+        · 仅"可用"教室显示。点击弹确认框。<br>
+        · <strong>若该教室有未来有效预订→提示"该教室有N条未完成预订，停用后将自动取消，是否继续？"</strong><br>
+        · 确认后：状态→"已停用"，关联未完成预订自动取消，<strong>师生查询不再显示该教室</strong>。
+      </div>
+      <div class="anno"><span class="cn">4</span> <strong>点击【设置时段】链接</strong>：跳转到时间段设置页，为该教室设置<strong>哪些日期的哪些课时可预订</strong>；<strong>仅"可用"教室显示此链接</strong>。</div>
+      <div class="anno"><span class="cn">5</span> <strong>点击【删除】链接</strong>（物理删除）<br>
+        · <strong>仅"已停用"教室显示</strong>；"可用"教室须先停用。<br>
+        · 弹确认框"确定删除该教室？此操作不可恢复"。<br>
+        · 边界：若仍存在关联预订/时段记录，应先清理；<strong>建议优先用"停用"(逻辑删除)保留历史</strong>。
+      </div>
+      <div class="anno"><span class="cn">6</span> <strong>新增教室表单——字段规则</strong>（均必填，<strong>教室编号由系统自动生成</strong>，格式如 CR001，全局唯一，无需手填）<br>
+        · <strong>教室名称</strong>(name)：2~30 字符。<br>
+        · <strong>位置</strong>(location)：必填，如"A栋1楼"，≤30 字符。<br>
+        · <strong>设备信息</strong>(equipment)：选填，多项用顿号分隔，如"投影仪、音响"，≤100 字符。
+      </div>
+      <div class="anno"><span class="cn">7</span> <strong>容量输入框</strong>（对应 capacity）<br>
+        · <strong>必填，正整数</strong>(≥1)，范围 1~500，不接受 0/负数/小数。<br>
+        · 出错提示：非正整数→"容量必须为正整数"。<br>
+        · 用途：师生查询可按"最低容量"筛选。
+      </div>
+      <div class="anno"><span class="cn">8</span> <strong>点击【保存】按钮</strong>：校验 必填完整 → 容量为正整数 → 名称合法。通过后弹确认框"确认新增该教室？"，<strong>确认后创建成功(状态默认可用，自动生成编号)</strong>，列表刷新。新教室需再"设置时段"后师生才能预订。</div>
     </div>
   </div>
 </div>
@@ -955,13 +1062,20 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
       </table>
     </div>
     <div class="col-anno">
-      <div class="anno"><span class="cn">1</span> <strong>教室下拉框</strong>：选择要设置时段的教室。<strong>只有状态为"可用"的教室才会出现在下拉列表中</strong>，已停用的教室不可设置时段。</div>
-      <div class="anno"><span class="cn">2</span> <strong>日期选择框</strong>：选择要开放预订的日期。通常设置未来的日期。</div>
-      <div class="anno"><span class="cn">3</span><span class="cn">4</span> <strong>课时下拉框</strong>：选择开始课时和结束课时（第1节~第12节）。<strong>结束课时必须大于等于开始课时</strong>，否则弹出提示"课时范围不合法"。</div>
-      <div class="anno"><span class="cn">5</span> <strong>点击【添加时段】按钮</strong>：<strong>系统检查新时段是否与该教室同一日期的已有时段存在重叠</strong>。若重叠则弹出提示"与已有时段冲突，无法添加"。若无冲突则添加成功，新时段状态为"空闲"，师生即可在查询中看到并预订。</div>
-      <div class="anno"><span class="cn">6</span> <strong>点击【置为不可用】链接</strong>：将该时段标记为不可用，师生查询时不再显示。只有"空闲"状态的时段可以执行此操作。</div>
-      <div class="anno"><span class="cn">7</span> <strong>点击【删除】链接</strong>：弹出确认对话框"确定删除该时段？"。确认后该时段记录被永久删除。只有"空闲"状态的时段可以删除。</div>
-      <div class="anno"><span class="cn">8</span> <strong>"不可操作"说明</strong>：<strong>状态为"已预订"的时段不可修改或删除</strong>。因为已有用户预订了该时段，修改或删除会影响已有预订的有效性。如需处理，应先通知用户取消预订。</div>
+      <div class="anno"><span class="cn">1</span> <strong>教室下拉框</strong>（必选）：选择要设置时段的教室。<strong>只有"可用"状态的教室出现在列表</strong>，已停用教室不可设置时段。未选→"请选择教室"。</div>
+      <div class="anno"><span class="cn">2</span> <strong>日期选择框</strong>（必填）：日历选择要开放预订的日期；<strong>不能早于今天</strong>(过去日期置灰)。未选→"请选择日期"。</div>
+      <div class="anno"><span class="cn">3</span><span class="cn">4</span> <strong>开始/结束课时下拉框</strong>（必选）<br>
+        · 取值 <strong>第1节~第12节</strong>(整数固定选项)。<br>
+        · <strong>结束课时 ≥ 开始课时</strong>，否则提示"结束课时不能小于开始课时"。
+      </div>
+      <div class="anno"><span class="cn">5</span> <strong>点击【添加时段】按钮</strong><br>
+        · 先校验：教室/日期/课时非空 → 结束≥开始。<br>
+        · 再<strong>检查与该教室同一日期的已有时段是否重叠</strong>(如已有第4~6节，再加第5~7节即冲突)。<br>
+        · 重叠→提示"与已有时段冲突，无法添加"；无冲突→添加成功，<strong>新时段状态="空闲"(FREE)</strong>，师生即可查询并预订。
+      </div>
+      <div class="anno"><span class="cn">6</span> <strong>点击【置为不可用】链接</strong>：将"空闲"时段标记为不可用，师生查询不再显示；<strong>仅"空闲"状态时段可操作</strong>，可再切回空闲。</div>
+      <div class="anno"><span class="cn">7</span> <strong>点击【删除】链接</strong>：弹确认框"确定删除该时段？"；确认后永久删除该时段记录；<strong>仅"空闲"状态时段可删除</strong>。</div>
+      <div class="anno"><span class="cn">8</span> <strong>"不可操作"说明</strong>：<strong>状态="已预订"的时段不可改/不可删/不可置为不可用</strong>(灰色)，因为已有用户预订，改动会破坏已有预订。须先由用户/管理员取消预订使其恢复"空闲"后再操作。</div>
     </div>
   </div>
 </div>
@@ -1039,10 +1153,24 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
       <div style="font-size:12px;color:#888;">共 3 条记录</div>
     </div>
     <div class="col-anno">
-      <div class="anno"><span class="cn">1</span><span class="cn">2</span> <strong>日期范围选择</strong>：设置查询的起始日期和截止日期，可查看任意时间段内的预订情况。</div>
-      <div class="anno"><span class="cn">3</span> <strong>教室下拉框</strong>：选择"全部教室"查看所有教室的预订，或选择指定教室只查看该教室的预订。</div>
-      <div class="anno"><span class="cn">4</span> <strong>状态下拉框</strong>：可选"全部""已创建""已完成""已取消"。选择后只显示对应状态的预订记录。</div>
-      <div class="anno"><span class="cn">5</span> <strong>点击【查询】按钮</strong>：根据筛选条件搜索预订记录。<strong>管理员可查看所有用户的全部预订记录</strong>，结果包含申请人姓名、身份、教室信息、课时范围、用途、状态和申请时间。</div>
+      <div class="anno"><span class="cn">1</span><span class="cn">2</span> <strong>起始/截止日期选择框</strong><br>
+        · 均为日历控件；可都留空(=不限日期，查全部)。<br>
+        · 若两者都填，<strong>截止日期不能早于起始日期</strong>，否则提示"截止日期不能早于起始日期"。<br>
+        · 跨度过大时(如&gt;1年)可提示缩小范围以提升性能。
+      </div>
+      <div class="anno"><span class="cn">3</span> <strong>教室下拉框</strong>（筛选）<br>
+        · 默认"全部教室"；选指定教室则只查该教室。<br>
+        · 列表含全部教室(含已停用，便于查历史预订)。
+      </div>
+      <div class="anno"><span class="cn">4</span> <strong>预订状态下拉框</strong>（筛选）<br>
+        · 选项：全部 / 已创建 / 已完成 / 已取消(单选)。<br>
+        · 默认"全部"；选某状态则只显示该状态记录。
+      </div>
+      <div class="anno"><span class="cn">5</span> <strong>点击【查询】按钮</strong><br>
+        · 先校验日期范围合法(截止≥起始)，再按 日期范围+教室+状态 组合筛选。<br>
+        · <strong>管理员可查所有用户的全部预订</strong>；结果含 预订编号、申请人、身份、教室、日期、课时、用途、状态、申请时间。<br>
+        · 结果分页(建议每页10/20条)；无结果→"无符合条件的预订记录"。可扩展导出Excel。
+      </div>
       <div class="anno">
         <strong>管理员查询 vs 师生查询的区别：</strong><br>
         · 管理员：可以查看<strong>所有用户</strong>的全部预订记录<br>
