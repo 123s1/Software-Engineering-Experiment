@@ -123,7 +123,6 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
   <div class="tree-item" onclick="showPage('room-mgmt')">教室管理页</div>
   <div class="tree-item" onclick="showPage('timeslot')">可用时间段设置页</div>
   <div class="tree-item" onclick="showPage('admin-query')">预订情况查询页</div>
-  <div class="tree-item" onclick="showPage('admin-changepwd')">修改密码页（管理员）</div>
 </div>
 
 <!-- ====== MAIN CANVAS ====== -->
@@ -267,89 +266,7 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
         <span class="cn">5</span> <strong>点击【退出登录】按钮</strong>：弹出确认框"确定退出登录？"，确认后清除登录状态(session)，返回登录页；取消则留在当前页。
       </div>
       <div class="anno">
-        <strong>共用说明：</strong>本"修改密码"表单为<strong>师生和管理员共用同一套界面</strong>（用例参与者为"已登录用户"）。在 Axure 里建议做成<strong>母版（Master）</strong>，两个角色页面复用，仅顶部导航栏不同。本页为师生导航版本，管理员版本见"修改密码页（管理员）"。
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ====================== PAGE: 修改密码页（管理员） ====================== -->
-<div class="page" id="page-admin-changepwd">
-  <div class="page-title">教室预订系统</div>
-  <div class="exit-btn" onclick="showPage('login')">退出登录 <span class="cn">5</span></div>
-  <div class="welcome">欢迎，admin01 | 当前角色：管理员</div>
-
-  <div class="wf-nav">
-    <div class="wf-nav-item" onclick="showPage('admin-home')">控制台</div>
-    <div class="wf-nav-item" onclick="showPage('user-mgmt')">用户管理</div>
-    <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理</div>
-    <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置</div>
-    <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询</div>
-    <div class="wf-nav-item active">修改密码</div>
-  </div>
-
-  <div class="sec-title">修改密码</div>
-
-  <div class="two-col">
-    <div class="col-content">
-      <div class="wf-form" style="max-width:500px;">
-        <div class="wf-row">
-          <span class="wf-label">当前账号：</span>
-          <span class="wname">账号显示</span>
-          <span style="font-weight:bold;">admin01</span>（只读，不可编辑）
-        </div>
-        <div class="wf-row">
-          <span class="wf-label">旧密码：</span>
-          <span class="wname">旧密码输入框</span>
-          <input class="wf-input" type="password" style="width:240px;">
-          <span class="cn">1</span>
-        </div>
-        <div class="wf-row">
-          <span class="wf-label">新密码：</span>
-          <span class="wname">新密码输入框</span>
-          <input class="wf-input" type="password" style="width:240px;">
-          <span class="cn">2</span>
-        </div>
-        <div class="wf-row">
-          <span class="wf-label">确认新密码：</span>
-          <span class="wname">确认密码输入框</span>
-          <input class="wf-input" type="password" style="width:240px;">
-          <span class="cn">3</span>
-        </div>
-        <div class="wf-row" style="justify-content:center; margin-top:16px;">
-          <span class="wname">保存按钮</span>
-          <button class="wf-btn wf-btn-primary">保存修改</button>
-          <span class="cn">4</span>
-        </div>
-      </div>
-    </div>
-    <div class="col-anno">
-      <div class="anno">
-        <span class="cn">1</span> <strong>旧密码输入框</strong><br>
-        · <strong>必填</strong>，掩码显示，不能为空。<br>
-        · 用于身份验证，必须等于管理员当前密码。<br>
-        · 出错提示：为空→"请输入旧密码"；不正确→"旧密码不正确"。
-      </div>
-      <div class="anno">
-        <span class="cn">2</span> <strong>新密码输入框</strong>（对应 t_user.password）<br>
-        · <strong>必填</strong>，掩码显示，不能含空格。<br>
-        · 长度 <strong>6~20 位</strong>，只允许字母、数字、常用符号。<br>
-        · <strong>不能与旧密码相同</strong>。<br>
-        · 出错提示：为空→"请输入新密码"；长度不足→"密码长度不能少于6位"；与旧密码相同→"新密码不能与旧密码相同"。
-      </div>
-      <div class="anno">
-        <span class="cn">3</span> <strong>确认密码输入框</strong><br>
-        · <strong>必填</strong>，掩码显示。<br>
-        · 必须与"新密码"<strong>完全一致</strong>（区分大小写）。<br>
-        · 出错提示：不一致→"两次输入的密码不一致"。
-      </div>
-      <div class="anno">
-        <span class="cn">4</span> <strong>点击【保存修改】按钮</strong><br>
-        · 校验顺序：① 三项是否非空 → ② 旧密码是否正确 → ③ 新密码长度/格式是否合规 → ④ 新密码≠旧密码 → ⑤ 两次输入是否一致。<br>
-        · <strong>全部通过后弹出确认框"确定修改密码？"，确认后密码立即生效</strong>，下次登录使用新密码。
-      </div>
-      <div class="anno">
-        <strong>与师生版的区别：</strong>表单和逻辑<strong>完全相同</strong>，仅顶部导航栏为管理员导航。建议在 Axure 中与师生版复用同一个<strong>母版（Master）</strong>，避免重复设计。
+        <strong>共用说明：</strong>本"修改密码"为<strong>所有已登录用户（师生与管理员）共用的同一个界面</strong>（用例参与者为"已登录用户"），<strong>不区分角色</strong>，表单字段与校验逻辑完全一致。用户登录后均从各自菜单的"修改密码"进入本页。
       </div>
     </div>
   </div>
@@ -731,7 +648,7 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理 <span class="cn">2</span></div>
     <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置 <span class="cn">3</span></div>
     <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询 <span class="cn">4</span></div>
-    <div class="wf-nav-item" onclick="showPage('admin-changepwd')">修改密码</div>
+    <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
   <div class="sec-title">管理员控制台</div>
@@ -793,7 +710,7 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理</div>
     <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置</div>
     <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询</div>
-    <div class="wf-nav-item" onclick="showPage('admin-changepwd')">修改密码</div>
+    <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
   <div class="sec-title">用户管理</div>
@@ -899,7 +816,7 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     <div class="wf-nav-item active">教室管理</div>
     <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置</div>
     <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询</div>
-    <div class="wf-nav-item" onclick="showPage('admin-changepwd')">修改密码</div>
+    <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
   <div class="sec-title">教室管理</div>
@@ -994,7 +911,7 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理</div>
     <div class="wf-nav-item active">时间段设置</div>
     <div class="wf-nav-item" onclick="showPage('admin-query')">预订查询</div>
-    <div class="wf-nav-item" onclick="showPage('admin-changepwd')">修改密码</div>
+    <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
   <div class="sec-title">教室可用时间段设置</div>
@@ -1092,7 +1009,7 @@ body { font-family: "SimSun","宋体","Microsoft YaHei",sans-serif; background:#
     <div class="wf-nav-item" onclick="showPage('room-mgmt')">教室管理</div>
     <div class="wf-nav-item" onclick="showPage('timeslot')">时间段设置</div>
     <div class="wf-nav-item active">预订查询</div>
-    <div class="wf-nav-item" onclick="showPage('admin-changepwd')">修改密码</div>
+    <div class="wf-nav-item" onclick="showPage('changepwd')">修改密码</div>
   </div>
 
   <div class="sec-title">教室预订情况查询</div>
@@ -1192,7 +1109,7 @@ function showPage(id) {
   if (pageEl) pageEl.classList.add('active');
   const map = {
     'login':0,'changepwd':1,'stu-home':2,'query-room':3,'reserve':4,'my-reserve':5,
-    'admin-home':6,'user-mgmt':7,'room-mgmt':8,'timeslot':9,'admin-query':10,'admin-changepwd':11
+    'admin-home':6,'user-mgmt':7,'room-mgmt':8,'timeslot':9,'admin-query':10
   };
   const items = document.querySelectorAll('#sidebar .tree-item');
   const idx = map[id];
